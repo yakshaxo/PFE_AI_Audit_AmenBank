@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+
+# Environment variables
+.env
+
+# Database
+*.db
+*.sqlite3
+
+# Docker volumes
+postgres/data/
+grafana/data/
+
+# AI Models (too large for Git)
+ai-chatbot/models/
+*.bin
+*.gguf
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
