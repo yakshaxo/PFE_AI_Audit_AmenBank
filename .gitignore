@@ -1,7 +1,6 @@
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
 *.so
 .Python
 venv/
@@ -13,22 +12,25 @@ env/
 # Database
 *.db
 *.sqlite3
+postgres/data/
 
 # Docker volumes
-postgres/data/
 grafana/data/
+zabbix/data/
 
-# AI Models (too large for Git)
-ai-chatbot/models/
-*.bin
-*.gguf
+# AI Models
+ai-chatbot/models/*.bin
+ai-chatbot/models/*.gguf
+ai-chatbot/models/*.pt
 
 # IDE
 .vscode/
 .idea/
 *.swp
-*.swo
 
 # OS
 .DS_Store
 Thumbs.db
+
+# Logs
+*.log
