@@ -34,12 +34,12 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
       ZBX_ENABLE_SNMP_TRAPS: "true"
-    volumes:
-      - ./zabbix/config:/etc/zabbix
     depends_on:
       - postgres
     networks:
       - pfe-network
+    ports:
+      - "10051:10051"
     restart: unless-stopped
     deploy:
       resources:
@@ -71,7 +71,7 @@ services:
   # ============================================
   # Grafana (Visualization)
   # ============================================
-      grafana:
+  grafana:
     image: grafana/grafana:latest
     container_name: pfe-grafana
     environment:
