@@ -1,4 +1,4 @@
-version: '3.8'
+
 
 services:
   # ============================================
@@ -48,6 +48,8 @@ services:
 
   # ============================================
   # Zabbix Web Interface
+  # ============================================  # ============================================
+  # Zabbix Web Interface
   # ============================================
   zabbix-web:
     image: zabbix/zabbix-web-nginx-pgsql:alpine-6.4-latest
@@ -59,6 +61,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
       PHP_TZ: Africa/Tunis
+      ZBX_SERVER_NAME: "louay-zabbix-server" 
     ports:
       - "${EXTERNAL_PORT_ZABBIX:-8080}:8080"
     depends_on:
@@ -67,6 +70,7 @@ services:
     networks:
       - pfe-network
     restart: unless-stopped
+
 
   # ============================================
   # Grafana (Visualization)
@@ -109,20 +113,20 @@ services:
   # ============================================
   # AI Chatbot - Uncomment in Week 6
   # ============================================
-  # ai-chatbot:
-  #   build:
-  #     context: ./ai-chatbot
-  #     dockerfile: Dockerfile
-  #   container_name: pfe-ai-chatbot
-  #   environment:
-  #     MODEL_PATH: ${AI_MODEL_PATH}
-  #   volumes:
-  #     - ./ai-chatbot/models:/app/models
-  #   ports:
-  #     - "${EXTERNAL_PORT_AI_API:-5000}:5000"
-  #   networks:
-  #     - pfe-network
-  #   restart: unless-stopped
+  ai-chatbot:
+    build:
+      context: ./ai-chatbot
+      dockerfile: Dockerfile
+    container_name: pfe-ai-chatbot
+    environment:
+      MODEL_PATH: ${AI_MODEL_PATH}
+    volumes:
+      - ./ai-chatbot/models:/app/models
+    ports:
+      - "${EXTERNAL_PORT_AI_API:-5000}:5000"
+    networks:
+      - pfe-network
+    restart: unless-stopped
 
 # ============================================
 # Networks
