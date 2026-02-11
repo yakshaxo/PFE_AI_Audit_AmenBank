@@ -120,6 +120,9 @@ services:
     container_name: pfe-ai-chatbot
     environment:
       MODEL_PATH: ${AI_MODEL_PATH}
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+    depends_on:
+      - postgres
     volumes:
       - ./ai-chatbot/models:/app/models
     ports:
@@ -127,6 +130,7 @@ services:
     networks:
       - pfe-network
     restart: unless-stopped
+
 
 # ============================================
 # Networks
