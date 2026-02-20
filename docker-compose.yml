@@ -1,147 +1,134 @@
-
+version: "3.9"
 
 services:
-  # ============================================
-  # PostgreSQL Database (Zabbix + Auth data)
-  # ============================================
-  postgres:
-    image: postgres:15-alpine
-    container_name: pfe-postgres
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./postgres/init:/docker-entrypoint-initdb.d
-    networks:
-      - pfe-network
-    restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          memory: ${MEMORY_LIMIT_POSTGRES:-1g}
 
-  # ============================================
-  # Zabbix Server
-  # ============================================
-  zabbix-server:
-    image: zabbix/zabbix-server-pgsql:alpine-6.4-latest
-    container_name: pfe-zabbix-server
+  # -------------------------------------------------
+  # PostgreSQL (Clean for Zabbix 6.0 LTS)
+  # -------------------------------------------------
+  postgres:
+    image: postgres:13-alpine
+    container_name: pfe_postgres
+    restart: unless-stopped
     environment:
-      DB_SERVER_HOST: postgres
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-      ZBX_ENABLE_SNMP_TRAPS: "true"
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: StrongPassword123
+      POSTGRES_DB: zabbix
+    volumes:
+      - ./zabbix/postgres_data:/var/lib/postgresql/data
+    networks:
+      - zabbix-net
+
+  # -------------------------------------------------
+  # Zabbix Server 6.0 LTS
+  # -------------------------------------------------
+  zabbix-server:
+    image: zabbix/zabbix-server-pgsql:alpine-6.0.29
+    container_name: pfe_zabbix-server
+    restart: unless-stopped
     depends_on:
       - postgres
-    networks:
-      - pfe-network
+    environment:
+      DB_SERVER_HOST: postgres
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: StrongPassword123
+
+      # TLS PSK
+      TLSCONNECT: psk
+      TLSACCEPT: psk
+      TLSPSKIDENTITY: ServerID
+      TLSPSKFILE: /etc/zabbix/ssl/server.psk
+
+    volumes:
+      - ./zabbix/ssl:/etc/zabbix/ssl
     ports:
       - "10051:10051"
-    restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          memory: ${MEMORY_LIMIT_ZABBIX:-2g}
+    networks:
+      - zabbix-net
 
-  # ============================================
-  # Zabbix Web Interface
-  # ============================================  # ============================================
-  # Zabbix Web Interface
-  # ============================================
+  # -------------------------------------------------
+  # Zabbix Web 6.0 LTS
+  # -------------------------------------------------
   zabbix-web:
-    image: zabbix/zabbix-web-nginx-pgsql:alpine-6.4-latest
-    container_name: pfe-zabbix-web
+    image: zabbix/zabbix-web-nginx-pgsql:alpine-6.0.29
+    container_name: pfe_zabbix-web
+    restart: unless-stopped
+    depends_on:
+      - zabbix-server
     environment:
       ZBX_SERVER_HOST: zabbix-server
       DB_SERVER_HOST: postgres
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: StrongPassword123
       PHP_TZ: Africa/Tunis
-      ZBX_SERVER_NAME: "louay-zabbix-server" 
     ports:
-      - "${EXTERNAL_PORT_ZABBIX:-8080}:8080"
+      - "8080:8080"
+    networks:
+      - zabbix-net
+
+  # -------------------------------------------------
+  # Zabbix Agent 6.0 LTS
+  # -------------------------------------------------
+  zabbix-agent:
+    image: zabbix/zabbix-agent:alpine-6.0.29
+    container_name: pfe_zabbix-agent
+    restart: unless-stopped
     depends_on:
-      - postgres
       - zabbix-server
+    environment:
+      ZBX_SERVER_HOST: zabbix-server
+      ZBX_HOSTNAME: agent_local
+
+      # TLS PSK
+      TLSCONNECT: psk
+      TLSACCEPT: psk
+      TLSPSKIDENTITY: AgentID
+      TLSPSKFILE: /etc/zabbix/ssl/agent.psk
+
+    volumes:
+      - ./zabbix_agent/agentd.conf:/etc/zabbix/zabbix_agent2.conf
+      - ./zabbix/ssl:/etc/zabbix/ssl
     networks:
-      - pfe-network
-    restart: unless-stopped
+      - zabbix-net
 
-
-  # ============================================
-  # Grafana (Visualization)
-  # ============================================
+  # -------------------------------------------------
+  # Grafana (Stable)
+  # -------------------------------------------------
   grafana:
-    image: grafana/grafana:latest
-    container_name: pfe-grafana
-    environment:
-      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER}
-      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
-      GF_INSTALL_PLUGINS: alexanderzobnin-zabbix-app
+    image: grafana/grafana:10.1.2
+    container_name: pfe_grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
     volumes:
-      - grafana_data:/var/lib/grafana
-      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
       - ./grafana/provisioning:/etc/grafana/provisioning
-    ports:
-      - "${EXTERNAL_PORT_GRAFANA:-3000}:3000"
-    depends_on:
-      - postgres
     networks:
-      - pfe-network
-    restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          memory: ${MEMORY_LIMIT_GRAFANA:-512m}
+      - zabbix-net
 
-  # ============================================
-  # Milvus (Vector Database) - Uncomment in Week 5
-  # ============================================
-  # milvus:
-  #   image: milvusdb/milvus:latest
-  #   container_name: pfe-milvus
-  #   ports:
-  #     - "19530:19530"
-  #   networks:
-  #     - pfe-network
-  #   restart: unless-stopped
-
-  # ============================================
-  # AI Chatbot - Uncomment in Week 6
-  # ============================================
-  ai-chatbot:
+  # -------------------------------------------------
+  # AI Engine
+  # -------------------------------------------------
+  ai_engine:
     build:
-      context: ./ai-chatbot
+      context: ./ai_engine
       dockerfile: Dockerfile
-    container_name: pfe-ai-chatbot
-    environment:
-      MODEL_PATH: ${AI_MODEL_PATH}
-      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
-    depends_on:
-      - postgres
-    volumes:
-      - ./ai-chatbot/models:/app/models
-    ports:
-      - "${EXTERNAL_PORT_AI_API:-5000}:5000"
-    networks:
-      - pfe-network
+    container_name: pfe_ai_engine
     restart: unless-stopped
+    depends_on:
+      - zabbix-web
+    environment:
+      # CORRECT API ENDPOINT
+      ZABBIX_API_URL: http://zabbix-web:8080/api_jsonrpc.php
+      ZABBIX_API_USER: Admin
+      ZABBIX_API_PASS: zabbix
+    ports:
+      - "5000:5000"
+    networks:
+      - zabbix-net
 
-
-# ============================================
-# Networks
-# ============================================
+# -------------------------------------------------
+# Network
+# -------------------------------------------------
 networks:
-  pfe-network:
+  zabbix-net:
     driver: bridge
-
-# ============================================
-# Volumes (Persistent Data)
-# ============================================
-volumes:
-  postgres_data:
-  grafana_data:

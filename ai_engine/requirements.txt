@@ -1,0 +1,9 @@
+fastapi==0.109.0
+fastapi-utils==0.3.3
+typing-inspect==0.9.0
+uvicorn==0.25.0
+requests==2.32.0
+pandas==2.1.0
+matplotlib==3.8.0
+seaborn==0.12.2
+fpdf==1.7.2

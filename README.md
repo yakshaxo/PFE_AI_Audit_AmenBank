@@ -143,3 +143,54 @@ Email: karim.rayachi@amenbank.com.tn
 - Nettoyer Docker régulièrement pour économiser l'espace disque
 
 ## 🎓 PFE - ESPRIT 2024-2025
+
+
+
+# 🏦 PFE: Système d'Audit et Monitoring AI pour Amen Bank
+
+## 📋 Description
+Système dockerisé de monitoring et d'audit intelligent combinant **Zabbix** pour la collecte de métriques et une couche d'**Intelligence Artificielle (FastAPI)** pour l'analyse d'anomalies en temps réel.
+
+## 🎯 Objectifs Réalisés (Phase Infrastructure)
+- [x] **Pipeline de Données Opérationnel :** Liaison temps réel entre Zabbix et le moteur AI.
+- [x] **Moteur d'Analyse (Backend) :** API REST avec FastAPI pour le traitement des alertes.
+- [x] **Webhooks Avancés :** Scripting JavaScript personnalisé pour l'envoi de JSON structuré.
+- [x] **Visualisation Dynamique :** Injection des prédictions AI directement dans le dashboard Zabbix via des "Tags".
+
+## 🛠️ Stack Technologique
+- **Monitoring:** Zabbix Server 6.0 + Zabbix Agent (Active/Passive)
+- **Backend AI:** FastAPI (Python 3.10)
+- **Containerisation:** Docker & Docker Compose
+- **Visualisation:** Zabbix Dashboard + Grafana
+- **Base de données:** PostgreSQL (Zabbix DB)
+
+## 🚀 Architecture du Pipeline AI
+Le flux de données actuel suit ce parcours :
+1. **Zabbix Agent** (LOUAY-PC) ➔ Envoi des métriques CPU/Système.
+2. **Zabbix Server** ➔ Détection de dépassement de seuil.
+3. **Webhook JS** ➔ Transformation des données en JSON et envoi POST.
+4. **FastAPI Engine** ➔ Analyse de l'alerte et calcul du score d'anomalie.
+5. **Tags Zabbix** ➔ Retour de la prédiction (`AI_Prediction`) sur le Dashboard.
+
+## 📂 Structure du Projet Actuelle
+
+PFE_AI_Audit_AmenBank/
+├── docker-compose.yml # Orchestration des services
+├── .env # Variables d'environnement (Passwords/IPs)
+├── README.md # Documentation projet
+├── ai-engine/ # Moteur d'IA (FastAPI)
+│ ├── main.py # Point d'entrée API
+│ ├── analyzer.py # Logique ML (Hakim - En cours)
+│ └── recommender.py # Système expert (Hakim - En cours)
+└── requirements.txt # Dépendances Python (FastAPI, Uvicorn, Scikit-learn)
+## 🌐 Accès Rapide
+
+| Service | URL | Usage |
+|---------|-----|-------|
+| **Zabbix UI** | http://localhost:8080 | Monitoring & Configuration Alertes |
+| **API Docs** | http://localhost:5000/docs | Documentation Swagger de l'IA |
+| **AI Health** | http://localhost:5000/health | Vérification d'état du moteur AI |
+
+## 📅 État d'avancement
+- **Semaine 3-4 :** Infrastructure Docker & Pipeline Zabbix-AI [TERMINÉ ✅]
+- **Semaine 5-6 :** Développement de la couche Machine Learning (Analyzer) [EN COURS ⏳]
