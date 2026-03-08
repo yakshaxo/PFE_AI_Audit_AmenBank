@@ -17,6 +17,8 @@ services:
       - ./zabbix/postgres_data:/var/lib/postgresql/data
     networks:
       - zabbix-net
+    ports:
+      - "5432:5432"
 
   # -------------------------------------------------
   # Zabbix Server 6.0 LTS
@@ -100,7 +102,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - grafana_data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
     networks:
       - zabbix-net
@@ -125,6 +127,17 @@ services:
       - "5000:5000"
     networks:
       - zabbix-net
+
+# -------------------------------------------------
+# Volumes
+# -------------------------------------------------
+volumes:
+  grafana_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: C:/grafana_data
+      o: bind
 
 # -------------------------------------------------
 # Network
