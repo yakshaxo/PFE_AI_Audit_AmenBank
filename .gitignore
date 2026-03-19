@@ -1,40 +1,18 @@
-# Python
-__pycache__/
-*.py[cod]
-*.so
-.Python
-venv/
-env/
-
-# Environment variables
+﻿# Secrets
 .env
+reports/sms_proxy.py
+reports/test_twilio.py
 
-# Database
-*.db
-*.sqlite3
-postgres/data/
-
-# Docker volumes
-grafana/data/
-zabbix/data/
-
-# AI Models
-ai-chatbot/models/*.bin
-ai-chatbot/models/*.gguf
-ai-chatbot/models/*.pt
-
-# IDE
-.vscode/
-.idea/
-*.swp
-
-# OS
-.DS_Store
-Thumbs.db
+# Database files (should NOT be in git)
+zabbix/postgres_data/
 
 # Logs
+logs/
 *.log
 
-zabbix/postgres_data/
+# Python
+__pycache__/
+*.pyc
 
-zabbix/postgres_data/
+# Reports
+reports/*.pdf
