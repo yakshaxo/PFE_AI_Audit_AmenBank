@@ -3,7 +3,7 @@ version: "3.9"
 services:
 
   # -------------------------------------------------
-  # PostgreSQL (Clean for Zabbix 6.0 LTS)
+  # PostgreSQL (Zabbix 6.0 LTS)
   # -------------------------------------------------
   postgres:
     image: postgres:13-alpine
@@ -21,7 +21,7 @@ services:
       - "5432:5432"
 
   # -------------------------------------------------
-  # Zabbix Server 6.0 LTS
+  # Zabbix Server 6.0 LTS (With Twilio DNS Bypass)
   # -------------------------------------------------
   zabbix-server:
     image: zabbix/zabbix-server-pgsql:alpine-6.0.29
@@ -33,22 +33,24 @@ services:
       DB_SERVER_HOST: postgres
       POSTGRES_USER: zabbix
       POSTGRES_PASSWORD: StrongPassword123
-
-      # TLS PSK
       TLSCONNECT: psk
       TLSACCEPT: psk
       TLSPSKIDENTITY: ServerID
       TLSPSKFILE: /etc/zabbix/ssl/server.psk
-
     volumes:
       - ./zabbix/ssl:/etc/zabbix/ssl
     ports:
       - "10051:10051"
     networks:
       - zabbix-net
+    dns:
+      - 8.8.8.8
+    # DIRECT IP MAPPING: Bypasses "Could not resolve host" for Twilio
+    extra_hosts:
+      - "api.twilio.com:54.172.180.201"
 
   # -------------------------------------------------
-  # Zabbix Web 6.0 LTS
+  # Zabbix Web 6.0 LTS (With Twilio DNS Bypass)
   # -------------------------------------------------
   zabbix-web:
     image: zabbix/zabbix-web-nginx-pgsql:alpine-6.0.29
@@ -66,6 +68,10 @@ services:
       - "8080:8080"
     networks:
       - zabbix-net
+    dns:
+      - 8.8.8.8
+    extra_hosts:
+      - "api.twilio.com:54.172.180.201"
 
   # -------------------------------------------------
   # Zabbix Agent 6.0 LTS
@@ -79,13 +85,10 @@ services:
     environment:
       ZBX_SERVER_HOST: zabbix-server
       ZBX_HOSTNAME: agent_local
-
-      # TLS PSK
       TLSCONNECT: psk
       TLSACCEPT: psk
       TLSPSKIDENTITY: AgentID
       TLSPSKFILE: /etc/zabbix/ssl/agent.psk
-
     volumes:
       - ./zabbix_agent/agentd.conf:/etc/zabbix/zabbix_agent2.conf
       - ./zabbix/ssl:/etc/zabbix/ssl
@@ -93,7 +96,7 @@ services:
       - zabbix-net
 
   # -------------------------------------------------
-  # Grafana (Stable)
+  # Grafana (PRESERVING C:/grafana_data)
   # -------------------------------------------------
   grafana:
     image: grafana/grafana:10.1.2
@@ -119,7 +122,6 @@ services:
     depends_on:
       - zabbix-web
     environment:
-      # CORRECT API ENDPOINT
       ZABBIX_API_URL: http://zabbix-web:8080/api_jsonrpc.php
       ZABBIX_API_USER: Admin
       ZABBIX_API_PASS: zabbix
@@ -129,7 +131,7 @@ services:
       - zabbix-net
 
 # -------------------------------------------------
-# Volumes
+# Volumes: Host path mapped specifically
 # -------------------------------------------------
 volumes:
   grafana_data:
