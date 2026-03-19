@@ -36,3 +36,5 @@ Thumbs.db
 *.log
 
 zabbix/postgres_data/
+
+zabbix/postgres_data/
