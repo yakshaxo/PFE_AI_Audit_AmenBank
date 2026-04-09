@@ -3,8 +3,12 @@ import joblib
 import os
 import numpy as np
 import sys
+import logging
 
-# Setup paths for Hakim's modules
+# Set up logging to match main.py
+logger = logging.getLogger("AI-Engine")
+
+# Setup paths for modules
 sys.path.append(os.path.dirname(__file__))
 
 try:
@@ -12,11 +16,10 @@ try:
     from recommender import recommend as hakim_recommend
     HAKIM_AVAILABLE = True
 except ImportError:
-    HAKIM_AVAILABLE = False 
+    HAKIM_AVAILABLE = False
     print("WARNING: Technical modules (analyzer/recommender) missing. Using AI Fallback.")
 
-# --- 1. Create a Synthetic Baseline ---
-# Since we don't have the CSV, we create a 'Normal' reference for the math in analyzer.py
+# Synthetic baseline for statistical analysis
 np.random.seed(42)
 baseline_df = pd.DataFrame({
     'cpu_usage': np.random.normal(30, 10, 100),
@@ -28,49 +31,54 @@ def load_model():
     """Finds and loads the AI model (.pkl or .joblib)"""
     models_dir = os.path.join(os.path.dirname(__file__), 'models')
     possible_names = ['model.pkl', 'audit_model.joblib', 'model.joblib']
-    
+
     for name in possible_names:
         path = os.path.join(models_dir, name)
         if os.path.exists(path):
             return joblib.load(path)
-    
+
     raise FileNotFoundError(f"AI Model not found in {models_dir}")
 
 def detect_anomaly(model, value: float, item_key: str) -> dict:
     """
     Main detection logic using the ML Model + Statistical Analyzer
     """
-    # Create the data format expected by both the Model and the Analyzer
+    # 1. Statistical row for analyzer (uses descriptive column names)
     row = pd.Series({
-        'cpu_usage': value if 'cpu' in item_key.lower() else 30,
-        'memory_usage': value if 'memory' in item_key.lower() else 40,
+        'cpu_usage':       value if 'cpu'     in item_key.lower() else 30,
+        'memory_usage':    value if 'memory'  in item_key.lower() else 40,
         'network_traffic': value if 'network' in item_key.lower() else 100,
     })
 
-    # --- ACTION 1: CALL THE ML MODEL ---
-    # We convert the row to a DataFrame for the model
-    input_df = pd.DataFrame([row])
-    
-    try:
-        # Most anomaly models return -1 for anomaly, 1 for normal
-        model_prediction = model.predict(input_df)[0]
-        is_ai_anomaly = (model_prediction == -1)
-    except Exception as e:
-        print(f"Model prediction failed: {e}")
-        is_ai_anomaly = value > 90 # Basic fallback if model fails
+    # 2. ML Model input — order MUST match training: ['cpu', 'memory', 'disk', 'network']
+    feature_order = ['cpu', 'memory', 'disk', 'network']
+    model_data = [[
+        value if 'cpu'     in item_key.lower() else 30,   # cpu
+        value if 'memory'  in item_key.lower() else 40,   # memory
+        30,                                                # disk (placeholder)
+        value if 'network' in item_key.lower() else 100,  # network
+    ]]
 
-    # --- ACTION 2: CALL THE ANALYZER (Statistical Check) ---
+    model_input = pd.DataFrame(model_data, columns=feature_order)
+
+    try:
+        model_prediction = model.predict(model_input)[0]
+        is_ai_anomaly = (model_prediction == -1)
+        logger.info(f"AI Model Prediction for {item_key}: {'ANOMALY' if is_ai_anomaly else 'NORMAL'}")
+    except Exception as e:
+        logger.error(f"Model prediction failed: {e}")
+        is_ai_anomaly = value > 90  # Fallback threshold
+
+    # 3. Statistical analysis
     if HAKIM_AVAILABLE:
-        # We pass our baseline_df so the math doesn't crash
         analysis = analyze_row(row, baseline_df)
     else:
-        analysis = {"severity": "LOW", "issues": ["AI detected pattern"], "is_correlated": False}
+        analysis = {"severity": "LOW", "issues": ["AI Pattern Detected"], "is_correlated": False}
 
-    # Merge AI intelligence with the Statistical results
     return {
-        "prediction": "ANOMALY" if (is_ai_anomaly or analysis['severity'] != "LOW") else "NORMAL",
-        "severity": "CRITICAL" if is_ai_anomaly else analysis['severity'],
-        "issues": analysis.get("issues", []),
+        "prediction":    "ANOMALY" if (is_ai_anomaly or analysis.get('severity') != "LOW") else "NORMAL",
+        "severity":      "CRITICAL" if is_ai_anomaly else analysis.get('severity', 'LOW'),
+        "issues":        analysis.get("issues", []),
         "anomaly_score": 0.95 if is_ai_anomaly else 0.10
     }
 
