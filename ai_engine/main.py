@@ -60,35 +60,32 @@ def health():
 @app.post("/analyze", response_model=AnalysisResponse)
 async def analyze(data: AlertData):
     try:
-        item_key = data.item_key or data.metric or "unknown"
-        logger.info(f"Processing: {data.host} | Key: {item_key} | Value: {data.value}")
+        
+        item_key = data.item_key or "unknown"
+        logger.info(f"📨 Requête reçue pour l'hôte : {data.host}")
 
-        # 1. Run anomaly detection
+        if model is None:
+            raise ValueError("Le modèle IA n'est pas chargé.")
+
+        # Exécution de la détection
         result = detect_anomaly(model, data.value, item_key)
-
-        # 2. Read from result dict
-        prediction = result.get("prediction", "NORMAL")
-        severity   = result.get("severity", "LOW")
-        raw_score  = result.get("anomaly_score") or 0.0
-        issues     = result.get("issues", ["No specific issues detected"])
-
-        # 3. Generate recommendations - pass the result dict directly
+        
+        # Récupération des recommandations (résultat est un dict, donc .get() est OK ici)
         recs = get_recommendation(result)
-
+        
         return AnalysisResponse(
             host=data.host,
-            prediction=prediction,
-            severity=severity,
-            score=round(float(raw_score), 2),
-            issues=issues,
+            prediction=result.get("prediction", "NORMAL"),
+            severity=result.get("severity", "LOW"),
+            score=round(float(result.get("anomaly_score", 0.0)), 2),
+            issues=result.get("issues", []),
             recommendations=recs,
-            timestamp=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            timestamp=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         )
-
     except Exception as e:
-        logger.error(f"CRASH in /analyze: {str(e)}", exc_info=True)
+        logger.error(f"💥 Erreur dans /analyze: {str(e)}")
+        # Renvoie l'erreur exacte à PowerShell pour le debug
         raise HTTPException(status_code=500, detail=f"Internal AI Engine Error: {str(e)}")
-
 
 @app.post("/webhook", response_model=AnalysisResponse)
 async def webhook(data: AlertData):
