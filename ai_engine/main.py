@@ -1,30 +1,56 @@
 import datetime
 import logging
+import os
 import psycopg2
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, field_validator
-from typing import Optional, Union
-from adapter import detect_anomaly, get_recommendation, load_model
-from sla_calculator import calculate_sla
+from typing import Optional, Union, List
+from dotenv import load_dotenv
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("AI-Engine")
 
-app = FastAPI(title="PFE AI Engine", version="2.4.0")
-model = None
+try:
+    from adapter import detect_anomaly, get_recommendation, load_model
+    from sla_calculator import calculate_sla
+except ImportError as e:
+    print(f"Error importing local modules: {e}")
 
-# AI audit database config
+
+load_dotenv()
+
+# --- CONFIGURATION FROM ENVIRONMENT ---
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
+logging.basicConfig(
+    level=LOG_LEVEL,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger("AmenBank-AI-Engine")
+
+# Database configuration
 DB_CONFIG = {
-    'host': 'postgres',
-    'port': 5432,
-    'database': 'ai_audit',
-    'user': 'zabbix',
-    'password': 'StrongPassword123'
+    'host': os.getenv('DB_HOST'),
+    'port': int(os.getenv('DB_PORT', 5432)),
+    'database': os.getenv('DB_NAME'),
+    'user': os.getenv('DB_USER'),
+    'password': os.getenv('DB_PASSWORD')
 }
 
 
+GRAFANA_URL = os.getenv("GRAFANA_URL")
+GRAFANA_TOKEN = os.getenv("GRAFANA_TOKEN")
+
+app = FastAPI(
+    title="PFE AI Audit Engine - Amen Bank",
+    description="Automated AI auditing and anomaly detection for Zabbix infrastructure.",
+    version="3.0.0"
+)
+
+
+model = None
+
+
 def save_to_db(host, prediction, severity, score, issues, recommendations):
-    """Save analysis result to ai_audit database"""
+    """Securely saves the AI audit results to PostgreSQL."""
+    conn = None
     try:
         conn = psycopg2.connect(**DB_CONFIG)
         cursor = conn.cursor()
@@ -32,118 +58,105 @@ def save_to_db(host, prediction, severity, score, issues, recommendations):
             INSERT INTO ai_results (host, prediction, severity, score, issues, recommendations, timestamp)
             VALUES (%s, %s, %s, %s, %s, %s, %s)
         """, (
-            host,
-            prediction,
-            severity,
-            score,
-            issues,
-            recommendations,
-            datetime.datetime.now()
+            host, prediction, severity, score, 
+            issues, recommendations, datetime.datetime.now()
         ))
         conn.commit()
         cursor.close()
-        conn.close()
-        logger.info(f"Result saved to database for host: {host}")
+        logger.info(f"Audit Logged: {host} is {prediction}")
     except Exception as e:
-        logger.error(f"Database save failed: {e}")
+        logger.error(f"Database Persistence Error: {e}")
+    finally:
+        if conn:
+            conn.close()
 
+# --- SCHEMAS ---
 
 class AlertData(BaseModel):
     host: str
-    trigger: Optional[str] = "Unknown"
-    severity: Optional[Union[str, int, float]] = "Unknown"
+    trigger: Optional[str] = "Manual Trigger"
+    severity: Optional[Union[str, int, float]] = "Not Set"
     value: float
-    item_key: Optional[str] = None
-    metric: Optional[str] = None
+    item_key: Optional[str] = "system.cpu.util"
 
     @field_validator("severity", mode="before")
     @classmethod
     def coerce_severity(cls, v):
-        if v is None:
-            return "Unknown"
-        return str(v)
-
+        return str(v) if v is not None else "Unknown"
 
 class AnalysisResponse(BaseModel):
     host: str
     prediction: str
     severity: str
     score: float
-    issues: list
-    recommendations: list
+    issues: List[str]
+    recommendations: List[str]
     timestamp: str
 
+# --- ENDPOINTS ---
 
 @app.on_event("startup")
 async def startup_event():
+    """Initializes the ML model on startup."""
     global model
-    logger.info("Starting AI Engine...")
+    logger.info("Initializing PFE AI Engine...")
     try:
         model = load_model()
-        if model:
-            logger.info("Model loaded successfully")
-        else:
-            logger.warning("No model file found - running in statistical-only mode")
+        logger.info("Machine Learning model loaded from disk.")
     except Exception as e:
-        logger.error(f"Model error: {e}")
-
+        logger.error(f"Failed to load AI model: {e}. Fallback mode active.")
 
 @app.get("/health")
-def health():
-    return {"status": "online", "model": model is not None}
-
-
-@app.get("/sla/{host}")
-async def get_sla(host: str, days: int = 30):
-    """
-    Calculate SLA for a given host over the last N days.
-    Example: GET /sla/louay-pc?days=7
-    """
-    logger.info(f"SLA request for host: {host} over {days} days")
-    return calculate_sla(host, days)
-
+def health_check():
+    """Check system status and environment variable connectivity."""
+    return {
+        "status": "online",
+        "model_ready": model is not None,
+        "database_target": DB_CONFIG['host'],
+        "grafana_auth": "Token-based" if GRAFANA_TOKEN else "Missing"
+    }
 
 @app.post("/analyze", response_model=AnalysisResponse)
-async def analyze(data: AlertData):
+async def analyze_metric(data: AlertData):
+    """The main AI pipeline: Analyze -> Audit -> Respond."""
     try:
-        item_key = data.item_key or data.metric or "unknown"
-        logger.info(f"Processing: {data.host} | Key: {item_key} | Value: {data.value}")
-
-        # 1. Run anomaly detection
-        result = detect_anomaly(model, data.value, item_key)
-
-        # 2. Read from result dict
+        # 1. Run AI Detection
+        result = detect_anomaly(model, data.value, data.item_key)
+        
+        # 2. Extract results
         prediction = result.get("prediction", "NORMAL")
-        severity   = result.get("severity", "LOW")
-        raw_score  = result.get("anomaly_score") or 0.0
-        issues     = result.get("issues", ["No specific issues detected"])
+        severity = result.get("severity", "LOW")
+        score = round(float(result.get("anomaly_score", 0.0)), 2)
+        issues = result.get("issues", [])
+        recommendations = get_recommendation(result)
 
-        # 3. Generate recommendations
-        recs = get_recommendation(result)
-
-        # 4. Save to database
-        save_to_db(data.host, prediction, severity, round(float(raw_score), 2), issues, recs)
+        # 3. Save to Audit Database
+        save_to_db(data.host, prediction, severity, score, issues, recommendations)
 
         return AnalysisResponse(
             host=data.host,
             prediction=prediction,
             severity=severity,
-            score=round(float(raw_score), 2),
+            score=score,
             issues=issues,
-            recommendations=recs,
-            timestamp=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            recommendations=recommendations,
+            timestamp=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         )
-
     except Exception as e:
-        logger.error(f"CRASH in /analyze: {str(e)}", exc_info=True)
-        raise HTTPException(status_code=500, detail=f"Internal AI Engine Error: {str(e)}")
+        logger.error(f"Analysis Pipeline Error: {e}")
+        raise HTTPException(status_code=500, detail="Internal AI Engine Error")
 
+@app.get("/sla/{host}")
+async def get_host_sla(host: str, days: int = 30):
+    """Calculate availability percentage for the bank's SLA reports."""
+    return calculate_sla(host, days)
 
-@app.post("/webhook", response_model=AnalysisResponse)
-async def webhook(data: AlertData):
-    return await analyze(data)
-
+@app.post("/webhook")
+async def zabbix_webhook(data: AlertData):
+    """Direct integration point for Zabbix HTTP Media Types."""
+    return await analyze_metric(data)
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=5000)
+    app_port = int(os.getenv("APP_PORT", 5000))
+    uvicorn.run(app, host="0.0.0.0", port=app_port)
