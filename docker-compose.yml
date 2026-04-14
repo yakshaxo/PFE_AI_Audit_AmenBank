@@ -45,7 +45,7 @@ services:
       - zabbix-net
     dns:
       - 8.8.8.8
-    # DIRECT IP MAPPING: Bypasses "Could not resolve host" for Twilio
+    # DIRECT IP MAPPING: Bypasses "Could not resolve host" for Twilio 
     extra_hosts:
       - "api.twilio.com:54.172.180.201"
 

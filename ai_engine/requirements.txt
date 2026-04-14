@@ -10,3 +10,4 @@ matplotlib
 seaborn
 fpdf
 psycopg2-binary
+python-dotenv

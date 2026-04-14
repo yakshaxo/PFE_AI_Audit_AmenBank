@@ -1,23 +1,16 @@
 import datetime
 import logging
 import os
+import time
 import psycopg2
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, field_validator
 from typing import Optional, Union, List
 from dotenv import load_dotenv
 
-
-try:
-    from adapter import detect_anomaly, get_recommendation, load_model
-    from sla_calculator import calculate_sla
-except ImportError as e:
-    print(f"Error importing local modules: {e}")
-
-
+# --- INITIALIZATION ---
 load_dotenv()
 
-# --- CONFIGURATION FROM ENVIRONMENT ---
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 logging.basicConfig(
     level=LOG_LEVEL,
@@ -25,47 +18,65 @@ logging.basicConfig(
 )
 logger = logging.getLogger("AmenBank-AI-Engine")
 
-# Database configuration
-DB_CONFIG = {
-    'host': os.getenv('DB_HOST'),
-    'port': int(os.getenv('DB_PORT', 5432)),
-    'database': os.getenv('DB_NAME'),
-    'user': os.getenv('DB_USER'),
-    'password': os.getenv('DB_PASSWORD')
-}
+try:
+    from adapter import detect_anomaly, get_recommendation, load_model
+    from sla_calculator import calculate_sla
+except ImportError as e:
+    logger.error(f"Critical Module Import Error: {e}")
 
-
-GRAFANA_URL = os.getenv("GRAFANA_URL")
-GRAFANA_TOKEN = os.getenv("GRAFANA_TOKEN")
+# --- CONFIGURATION ---
+# Explicitly ensuring host is not 'localhost' if running in Docker
+DB_HOST = os.getenv('DB_HOST', 'pfe_postgres')
+DB_PORT = os.getenv('DB_PORT', '5432')
+DB_NAME = os.getenv('DB_NAME', 'ai_audit')
+DB_USER = os.getenv('DB_USER', 'zabbix')
+DB_PASS = os.getenv('DB_PASSWORD', 'StrongPassword123')
 
 app = FastAPI(
     title="PFE AI Audit Engine - Amen Bank",
     description="Automated AI auditing and anomaly detection for Zabbix infrastructure.",
-    version="3.0.0"
+    version="3.1.0"
 )
-
 
 model = None
 
+# --- DATABASE LOGIC ---
 
-def save_to_db(host, prediction, severity, score, issues, recommendations):
-    """Securely saves the AI audit results to PostgreSQL."""
+def get_db_connection():
+    """Establishes a TCP connection to the PostgreSQL container."""
+    return psycopg2.connect(
+        host=DB_HOST,
+        port=DB_PORT,
+        database=DB_NAME,
+        user=DB_USER,
+        password=DB_PASS,
+        connect_timeout=5  # Prevents hanging on bad sockets
+    )
+
+def save_to_db(host_name, prediction, severity, score, issues, recommendations):
+    """Securely persists AI results to the audit layer."""
     conn = None
     try:
-        conn = psycopg2.connect(**DB_CONFIG)
+        conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("""
+        
+        query = """
             INSERT INTO ai_results (host, prediction, severity, score, issues, recommendations, timestamp)
             VALUES (%s, %s, %s, %s, %s, %s, %s)
-        """, (
-            host, prediction, severity, score, 
+        """
+        params = (
+            host_name, prediction, severity, score, 
             issues, recommendations, datetime.datetime.now()
-        ))
+        )
+        
+        cursor.execute(query, params)
         conn.commit()
         cursor.close()
-        logger.info(f"Audit Logged: {host} is {prediction}")
+        logger.info(f"Audit Persistence Success: {host_name} recorded at {score}")
+        
     except Exception as e:
-        logger.error(f"Database Persistence Error: {e}")
+        logger.error(f"Database Persistence Failure: {e}")
+        # Note: In a production environment, you might implement a local queue fallback here
     finally:
         if conn:
             conn.close()
@@ -97,40 +108,39 @@ class AnalysisResponse(BaseModel):
 
 @app.on_event("startup")
 async def startup_event():
-    """Initializes the ML model on startup."""
+    """Initializes the ML model and verifies DB connectivity."""
     global model
-    logger.info("Initializing PFE AI Engine...")
+    logger.info("Initializing Amen Bank AI Engine...")
+    
+    # 1. Load Model
     try:
         model = load_model()
-        logger.info("Machine Learning model loaded from disk.")
+        logger.info("Machine Learning Model loaded successfully.")
     except Exception as e:
-        logger.error(f"Failed to load AI model: {e}. Fallback mode active.")
+        logger.error(f"Model Load Failure: {e}")
 
-@app.get("/health")
-def health_check():
-    """Check system status and environment variable connectivity."""
-    return {
-        "status": "online",
-        "model_ready": model is not None,
-        "database_target": DB_CONFIG['host'],
-        "grafana_auth": "Token-based" if GRAFANA_TOKEN else "Missing"
-    }
+    # 2. Test DB Connection
+    try:
+        test_conn = get_db_connection()
+        test_conn.close()
+        logger.info(f"Database Connectivity Verified: Connected to {DB_NAME} at {DB_HOST}")
+    except Exception as e:
+        logger.warning(f"Database is currently unreachable: {e}. Ensure 'pfe_postgres' is running.")
 
 @app.post("/analyze", response_model=AnalysisResponse)
 async def analyze_metric(data: AlertData):
-    """The main AI pipeline: Analyze -> Audit -> Respond."""
+    """Primary pipeline for processing Zabbix alerts through the AI Audit layer."""
     try:
-        # 1. Run AI Detection
-        result = detect_anomaly(model, data.value, data.item_key)
+        # 1. AI Analysis
+        result = detect_anomaly(model, data.value, data.item_key, data.severity)
         
-        # 2. Extract results
         prediction = result.get("prediction", "NORMAL")
         severity = result.get("severity", "LOW")
-        score = round(float(result.get("anomaly_score", 0.0)), 2)
+        score = round(float(result.get("anomaly_score", 0.0)), 3)
         issues = result.get("issues", [])
         recommendations = get_recommendation(result)
 
-        # 3. Save to Audit Database
+        # 2. Database Record (Non-blocking attempt)
         save_to_db(data.host, prediction, severity, score, issues, recommendations)
 
         return AnalysisResponse(
@@ -143,20 +153,22 @@ async def analyze_metric(data: AlertData):
             timestamp=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         )
     except Exception as e:
-        logger.error(f"Analysis Pipeline Error: {e}")
-        raise HTTPException(status_code=500, detail="Internal AI Engine Error")
+        logger.error(f"Pipeline Execution Error: {e}")
+        raise HTTPException(status_code=500, detail="Internal Engine Error")
 
-@app.get("/sla/{host}")
-async def get_host_sla(host: str, days: int = 30):
-    """Calculate availability percentage for the bank's SLA reports."""
-    return calculate_sla(host, days)
+@app.get("/health")
+def health_check():
+    return {
+        "status": "active",
+        "engine": "PFE-AmenBank-V3",
+        "db_connected": DB_HOST,
+        "model_loaded": model is not None
+    }
 
 @app.post("/webhook")
 async def zabbix_webhook(data: AlertData):
-    """Direct integration point for Zabbix HTTP Media Types."""
     return await analyze_metric(data)
 
 if __name__ == "__main__":
     import uvicorn
-    app_port = int(os.getenv("APP_PORT", 5000))
-    uvicorn.run(app, host="0.0.0.0", port=app_port)
+    uvicorn.run(app, host="0.0.0.0", port=5000)
