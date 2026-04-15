@@ -24,18 +24,21 @@ try:
 except ImportError as e:
     logger.error(f"Critical Module Import Error: {e}")
 
-# --- CONFIGURATION ---
-# Explicitly ensuring host is not 'localhost' if running in Docker
+# --- INFRASTRUCTURE CONFIGURATION ---
 DB_HOST = os.getenv('DB_HOST', 'pfe_postgres')
 DB_PORT = os.getenv('DB_PORT', '5432')
 DB_NAME = os.getenv('DB_NAME', 'ai_audit')
 DB_USER = os.getenv('DB_USER', 'zabbix')
-DB_PASS = os.getenv('DB_PASSWORD', 'StrongPassword123')
+DB_PASS = os.getenv('DB_PASSWORD')
+
+# --- GRAFANA CONFIGURATION (SECURE FETCH) ---
+GRAFANA_URL = os.getenv("GRAFANA_URL")
+GRAFANA_TOKEN = os.getenv("GRAFANA_TOKEN")
 
 app = FastAPI(
     title="PFE AI Audit Engine - Amen Bank",
     description="Automated AI auditing and anomaly detection for Zabbix infrastructure.",
-    version="3.1.0"
+    version="3.2.0"
 )
 
 model = None
@@ -50,7 +53,7 @@ def get_db_connection():
         database=DB_NAME,
         user=DB_USER,
         password=DB_PASS,
-        connect_timeout=5  # Prevents hanging on bad sockets
+        connect_timeout=5
     )
 
 def save_to_db(host_name, prediction, severity, score, issues, recommendations):
@@ -76,7 +79,6 @@ def save_to_db(host_name, prediction, severity, score, issues, recommendations):
         
     except Exception as e:
         logger.error(f"Database Persistence Failure: {e}")
-        # Note: In a production environment, you might implement a local queue fallback here
     finally:
         if conn:
             conn.close()
@@ -108,30 +110,35 @@ class AnalysisResponse(BaseModel):
 
 @app.on_event("startup")
 async def startup_event():
-    """Initializes the ML model and verifies DB connectivity."""
+    """Initializes the ML model and verifies connectivity dependencies."""
     global model
     logger.info("Initializing Amen Bank AI Engine...")
     
-    # 1. Load Model
+    # 1. Load ML Model
     try:
         model = load_model()
         logger.info("Machine Learning Model loaded successfully.")
     except Exception as e:
         logger.error(f"Model Load Failure: {e}")
 
-    # 2. Test DB Connection
+    # 2. Verify Database
     try:
         test_conn = get_db_connection()
         test_conn.close()
-        logger.info(f"Database Connectivity Verified: Connected to {DB_NAME} at {DB_HOST}")
+        logger.info(f"Database Connectivity Verified: {DB_NAME} at {DB_HOST}")
     except Exception as e:
-        logger.warning(f"Database is currently unreachable: {e}. Ensure 'pfe_postgres' is running.")
+        logger.error(f"DB Connectivity Failure: {e}")
+
+    # 3. Verify Grafana Config (Environment only)
+    if GRAFANA_URL and GRAFANA_TOKEN:
+        logger.info(f"Grafana Integration: Configured for {GRAFANA_URL}")
+    else:
+        logger.warning("Grafana Integration: Missing URL or Token in environment.")
 
 @app.post("/analyze", response_model=AnalysisResponse)
 async def analyze_metric(data: AlertData):
     """Primary pipeline for processing Zabbix alerts through the AI Audit layer."""
     try:
-        # 1. AI Analysis
         result = detect_anomaly(model, data.value, data.item_key, data.severity)
         
         prediction = result.get("prediction", "NORMAL")
@@ -140,7 +147,6 @@ async def analyze_metric(data: AlertData):
         issues = result.get("issues", [])
         recommendations = get_recommendation(result)
 
-        # 2. Database Record (Non-blocking attempt)
         save_to_db(data.host, prediction, severity, score, issues, recommendations)
 
         return AnalysisResponse(
@@ -158,11 +164,19 @@ async def analyze_metric(data: AlertData):
 
 @app.get("/health")
 def health_check():
+    """Detailed health check for PFE defense demonstration."""
     return {
         "status": "active",
         "engine": "PFE-AmenBank-V3",
-        "db_connected": DB_HOST,
-        "model_loaded": model is not None
+        "database": {
+            "target": DB_HOST,
+            "name": DB_NAME
+        },
+        "grafana": {
+            "configured": bool(GRAFANA_URL and GRAFANA_TOKEN),
+            "endpoint": GRAFANA_URL if GRAFANA_URL else "Not Set"
+        },
+        "ml_model_loaded": model is not None
     }
 
 @app.post("/webhook")
