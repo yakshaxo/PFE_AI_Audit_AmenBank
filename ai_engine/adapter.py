@@ -38,10 +38,10 @@ def detect_anomaly(model, value: float, item_key: str, zabbix_severity: str = "L
     and respects Zabbix severity levels.
     """
     row = pd.Series({
-        'cpu_usage':       value if 'cpu'     in item_key.lower() else 30,
-        'memory_usage':    value if 'memory'  in item_key.lower() else 40,
-        'network_traffic': value if 'network' in item_key.lower() else 100,
-    })
+    'cpu_usage':       value if any(x in item_key.lower() for x in ['cpu', 'processor', 'load']) else 30,
+    'memory_usage':    value if any(x in item_key.lower() for x in ['mem', 'vm.memory', 'swap']) else 40,
+    'network_traffic': value if any(x in item_key.lower() for x in ['net', 'eth', 'traffic', 'if.in']) else 100,
+})
 
     feature_order = ['cpu', 'memory', 'disk', 'network']
     model_data = [[

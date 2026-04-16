@@ -21,7 +21,7 @@ services:
       - "5432:5432"
 
   # -------------------------------------------------
-  # Zabbix Server 6.0 LTS (With Twilio DNS Bypass)
+  # Zabbix Server 6.0 LTS
   # -------------------------------------------------
   zabbix-server:
     image: zabbix/zabbix-server-pgsql:alpine-6.0.29
@@ -45,12 +45,11 @@ services:
       - zabbix-net
     dns:
       - 8.8.8.8
-    # DIRECT IP MAPPING: Bypasses "Could not resolve host" for Twilio 
     extra_hosts:
       - "api.twilio.com:54.172.180.201"
 
   # -------------------------------------------------
-  # Zabbix Web 6.0 LTS (With Twilio DNS Bypass)
+  # Zabbix Web 6.0 LTS
   # -------------------------------------------------
   zabbix-web:
     image: zabbix/zabbix-web-nginx-pgsql:alpine-6.0.29
@@ -96,7 +95,7 @@ services:
       - zabbix-net
 
   # -------------------------------------------------
-  # Grafana (PRESERVING C:/grafana_data)
+  # Grafana
   # -------------------------------------------------
   grafana:
     image: grafana/grafana:10.1.2
@@ -111,7 +110,7 @@ services:
       - zabbix-net
 
   # -------------------------------------------------
-  # AI Engine
+  # AI Engine (Cleaned Syntax)
   # -------------------------------------------------
   ai_engine:
     build:
@@ -125,13 +124,29 @@ services:
       ZABBIX_API_URL: http://zabbix-web:8080/api_jsonrpc.php
       ZABBIX_API_USER: Admin
       ZABBIX_API_PASS: zabbix
+      # Matches your .env config
+      DB_HOST: pfe_postgres
+      DB_PORT: 5432
+      DB_NAME: ai_audit
+      DB_USER: zabbix
+      DB_PASSWORD: StrongPassword123
+      GRAFANA_URL: http://pfe_grafana:3000
+      GRAFANA_TOKEN: ${GRAFANA_TOKEN}
     ports:
       - "5000:5000"
     networks:
       - zabbix-net
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: "4G"        
+        reservations:
+          cpus: '0.5'
+          memory: "1G"
 
 # -------------------------------------------------
-# Volumes: Host path mapped specifically
+# Volumes & Networks
 # -------------------------------------------------
 volumes:
   grafana_data:
@@ -141,9 +156,6 @@ volumes:
       device: C:/grafana_data
       o: bind
 
-# -------------------------------------------------
-# Network
-# -------------------------------------------------
 networks:
   zabbix-net:
     driver: bridge

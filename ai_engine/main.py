@@ -1,9 +1,9 @@
 import datetime
 import logging
 import os
-import time
+import asyncio
 import psycopg2
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, BackgroundTasks
 from pydantic import BaseModel, field_validator
 from typing import Optional, Union, List
 from dotenv import load_dotenv
@@ -31,14 +31,14 @@ DB_NAME = os.getenv('DB_NAME', 'ai_audit')
 DB_USER = os.getenv('DB_USER', 'zabbix')
 DB_PASS = os.getenv('DB_PASSWORD')
 
-# --- GRAFANA CONFIGURATION (SECURE FETCH) ---
+# --- GRAFANA CONFIGURATION ---
 GRAFANA_URL = os.getenv("GRAFANA_URL")
 GRAFANA_TOKEN = os.getenv("GRAFANA_TOKEN")
 
 app = FastAPI(
     title="PFE AI Audit Engine - Amen Bank",
     description="Automated AI auditing and anomaly detection for Zabbix infrastructure.",
-    version="3.2.0"
+    version="3.3.0"
 )
 
 model = None
@@ -56,8 +56,35 @@ def get_db_connection():
         connect_timeout=5
     )
 
+async def run_daily_maintenance():
+  
+    while True:
+        logger.info("MAINTENANCE: Starting automated 3-month retention purge...")
+        conn = None
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            
+            # The Bank's Retention Policy
+            query = "DELETE FROM ai_results WHERE timestamp < NOW() - INTERVAL '3 months';"
+            cursor.execute(query)
+            
+            deleted_count = cursor.rowcount
+            conn.commit()
+            cursor.close()
+            logger.info(f"MAINTENANCE: Success. Purged {deleted_count} old records.")
+            
+        except Exception as e:
+            logger.error(f"MAINTENANCE: Retention purge failed: {e}")
+        finally:
+            if conn:
+                conn.close()
+        
+        # Sleep for 24 hours
+        await asyncio.sleep(86400)
+
 def save_to_db(host_name, prediction, severity, score, issues, recommendations):
-    """Securely persists AI results to the audit layer."""
+    """Persists AI results to the audit layer."""
     conn = None
     try:
         conn = get_db_connection()
@@ -75,7 +102,7 @@ def save_to_db(host_name, prediction, severity, score, issues, recommendations):
         cursor.execute(query, params)
         conn.commit()
         cursor.close()
-        logger.info(f"Audit Persistence Success: {host_name} recorded at {score}")
+        logger.info(f"Audit Persistence Success: {host_name} recorded.")
         
     except Exception as e:
         logger.error(f"Database Persistence Failure: {e}")
@@ -106,11 +133,11 @@ class AnalysisResponse(BaseModel):
     recommendations: List[str]
     timestamp: str
 
-# --- ENDPOINTS ---
+# --- STARTUP EVENT ---
 
 @app.on_event("startup")
 async def startup_event():
-    """Initializes the ML model and verifies connectivity dependencies."""
+    """Initializes the ML model and activates automated maintenance."""
     global model
     logger.info("Initializing Amen Bank AI Engine...")
     
@@ -125,19 +152,18 @@ async def startup_event():
     try:
         test_conn = get_db_connection()
         test_conn.close()
-        logger.info(f"Database Connectivity Verified: {DB_NAME} at {DB_HOST}")
+        logger.info(f"Database Connectivity Verified: {DB_NAME}")
     except Exception as e:
         logger.error(f"DB Connectivity Failure: {e}")
 
-    # 3. Verify Grafana Config (Environment only)
-    if GRAFANA_URL and GRAFANA_TOKEN:
-        logger.info(f"Grafana Integration: Configured for {GRAFANA_URL}")
-    else:
-        logger.warning("Grafana Integration: Missing URL or Token in environment.")
+    # 3. Launch Automated Maintenance (Retention)
+    asyncio.create_task(run_daily_maintenance())
+    logger.info("Background Service: Automated 3-Month Retention is ACTIVE.")
+
+#endpoints
 
 @app.post("/analyze", response_model=AnalysisResponse)
 async def analyze_metric(data: AlertData):
-    """Primary pipeline for processing Zabbix alerts through the AI Audit layer."""
     try:
         result = detect_anomaly(model, data.value, data.item_key, data.severity)
         
@@ -164,18 +190,11 @@ async def analyze_metric(data: AlertData):
 
 @app.get("/health")
 def health_check():
-    """Detailed health check for PFE defense demonstration."""
     return {
         "status": "active",
-        "engine": "PFE-AmenBank-V3",
-        "database": {
-            "target": DB_HOST,
-            "name": DB_NAME
-        },
-        "grafana": {
-            "configured": bool(GRAFANA_URL and GRAFANA_TOKEN),
-            "endpoint": GRAFANA_URL if GRAFANA_URL else "Not Set"
-        },
+        "engine": "PFE-AmenBank-V3.3",
+        "maintenance": "Automated Retention Active (90 Days)",
+        "database": {"target": DB_HOST, "name": DB_NAME},
         "ml_model_loaded": model is not None
     }
 
