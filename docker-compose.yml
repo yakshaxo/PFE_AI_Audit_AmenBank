@@ -1,18 +1,13 @@
-version: "3.9"
-
 services:
-
-  # -------------------------------------------------
-  # PostgreSQL (Zabbix 6.0 LTS)
-  # -------------------------------------------------
-  postgres:
+  pfe_postgres:
     image: postgres:13-alpine
     container_name: pfe_postgres
     restart: unless-stopped
+    env_file: .env 
     environment:
-      POSTGRES_USER: zabbix
-      POSTGRES_PASSWORD: StrongPassword123
-      POSTGRES_DB: zabbix
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     volumes:
       - ./zabbix/postgres_data:/var/lib/postgresql/data
     networks:
@@ -20,141 +15,75 @@ services:
     ports:
       - "5432:5432"
 
-  # -------------------------------------------------
-  # Zabbix Server 6.0 LTS
-  # -------------------------------------------------
   zabbix-server:
     image: zabbix/zabbix-server-pgsql:alpine-6.0.29
     container_name: pfe_zabbix-server
     restart: unless-stopped
     depends_on:
-      - postgres
+      - pfe_postgres
+    env_file: .env
     environment:
-      DB_SERVER_HOST: postgres
-      POSTGRES_USER: zabbix
-      POSTGRES_PASSWORD: StrongPassword123
-      TLSCONNECT: psk
-      TLSACCEPT: psk
-      TLSPSKIDENTITY: ServerID
-      TLSPSKFILE: /etc/zabbix/ssl/server.psk
+      - DB_SERVER_HOST=pfe_postgres
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - ./zabbix/ssl:/etc/zabbix/ssl
     ports:
       - "10051:10051"
     networks:
       - zabbix-net
-    dns:
-      - 8.8.8.8
-    extra_hosts:
-      - "api.twilio.com:54.172.180.201"
 
-  # -------------------------------------------------
-  # Zabbix Web 6.0 LTS
-  # -------------------------------------------------
   zabbix-web:
     image: zabbix/zabbix-web-nginx-pgsql:alpine-6.0.29
     container_name: pfe_zabbix-web
     restart: unless-stopped
     depends_on:
       - zabbix-server
+    env_file: .env
     environment:
-      ZBX_SERVER_HOST: zabbix-server
-      DB_SERVER_HOST: postgres
-      POSTGRES_USER: zabbix
-      POSTGRES_PASSWORD: StrongPassword123
-      PHP_TZ: Africa/Tunis
+      - ZBX_SERVER_HOST=zabbix-server
+      - DB_SERVER_HOST=pfe_postgres
+      - POSTGRES_DB=${POSTGRES_DB}
+      - PHP_TZ=Africa/Tunis
     ports:
       - "8080:8080"
     networks:
       - zabbix-net
-    dns:
-      - 8.8.8.8
-    extra_hosts:
-      - "api.twilio.com:54.172.180.201"
 
-  # -------------------------------------------------
-  # Zabbix Agent 6.0 LTS
-  # -------------------------------------------------
-  zabbix-agent:
-    image: zabbix/zabbix-agent:alpine-6.0.29
-    container_name: pfe_zabbix-agent
-    restart: unless-stopped
-    depends_on:
-      - zabbix-server
-    environment:
-      ZBX_SERVER_HOST: zabbix-server
-      ZBX_HOSTNAME: agent_local
-      TLSCONNECT: psk
-      TLSACCEPT: psk
-      TLSPSKIDENTITY: AgentID
-      TLSPSKFILE: /etc/zabbix/ssl/agent.psk
-    volumes:
-      - ./zabbix_agent/agentd.conf:/etc/zabbix/zabbix_agent2.conf
-      - ./zabbix/ssl:/etc/zabbix/ssl
-    networks:
-      - zabbix-net
-
-  # -------------------------------------------------
-  # Grafana
-  # -------------------------------------------------
-  grafana:
+  pfe_grafana:
     image: grafana/grafana:10.1.2
     container_name: pfe_grafana
     restart: unless-stopped
+    depends_on:
+      - zabbix-web
+    env_file: .env
     ports:
       - "3000:3000"
     volumes:
-      - grafana_data:/var/lib/grafana
-      - ./grafana/provisioning:/etc/grafana/provisioning
+      - C:/grafana_data:/var/lib/grafana
     networks:
       - zabbix-net
 
-  # -------------------------------------------------
-  # AI Engine (Cleaned Syntax)
-  # -------------------------------------------------
-  ai_engine:
+  pfe_ai_engine:
     build:
-      context: ./ai_engine
+      context: .
       dockerfile: Dockerfile
     container_name: pfe_ai_engine
     restart: unless-stopped
     depends_on:
-      - zabbix-web
+      - pfe_postgres
+    env_file: .env 
     environment:
-      ZABBIX_API_URL: http://zabbix-web:8080/api_jsonrpc.php
-      ZABBIX_API_USER: Admin
-      ZABBIX_API_PASS: zabbix
-      # Matches your .env config
-      DB_HOST: pfe_postgres
-      DB_PORT: 5432
-      DB_NAME: ai_audit
-      DB_USER: zabbix
-      DB_PASSWORD: StrongPassword123
-      GRAFANA_URL: http://pfe_grafana:3000
-      GRAFANA_TOKEN: ${GRAFANA_TOKEN}
+      - PYTHONPATH=/app
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./ai_engine:/app
+      - ./templates:/app/templates
     ports:
       - "5000:5000"
     networks:
       - zabbix-net
-    deploy:
-      resources:
-        limits:
-          cpus: '2.0'
-          memory: "4G"        
-        reservations:
-          cpus: '0.5'
-          memory: "1G"
-
-# -------------------------------------------------
-# Volumes & Networks
-# -------------------------------------------------
-volumes:
-  grafana_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: C:/grafana_data
-      o: bind
 
 networks:
   zabbix-net:

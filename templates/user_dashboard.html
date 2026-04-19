@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OVERWATCH AI — User Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #03060f;
+            --surface: #080d1a;
+            --surface2: #0d1526;
+            --border: rgba(59, 130, 246, 0.12);
+            --blue: #3b82f6;
+            --blue-dim: rgba(59, 130, 246, 0.08);
+            --green: #22c55e;
+            --red: #ef4444;
+            --orange: #f97316;
+            --yellow: #eab308;
+            --text: #e2e8f0;
+            --muted: #64748b;
+        }
+
+        body {
+            font-family: 'Syne', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 220px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 28px 0;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand {
+            padding: 0 24px 28px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 24px;
+        }
+
+        .sidebar-brand .logo {
+            font-family: 'Space Mono', monospace;
+            font-size: 16px;
+            color: var(--blue);
+            letter-spacing: 0.15em;
+            display: block;
+        }
+
+        .sidebar-brand .role-tag {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            color: var(--muted);
+            letter-spacing: 0.2em;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .nav-section { padding: 0 16px; margin-bottom: 8px; }
+
+        .nav-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            color: var(--muted);
+            letter-spacing: 0.2em;
+            padding: 0 8px;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 2px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.15s;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .nav-item:hover { color: var(--text); background: var(--blue-dim); }
+        .nav-item.active { color: var(--blue); background: var(--blue-dim); border-left: 2px solid var(--blue); }
+        .nav-item.danger { color: var(--red); }
+        .nav-item.danger:hover { background: rgba(239,68,68,0.08); }
+        .nav-icon { font-size: 14px; width: 18px; text-align: center; }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            padding: 0 16px;
+            border-top: 1px solid var(--border);
+            padding-top: 16px;
+        }
+
+        .main { flex: 1; overflow-y: auto; padding: 32px 40px; }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .page-title { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+        .page-subtitle { font-size: 12px; color: var(--muted); margin-top: 2px; font-family: 'Space Mono', monospace; }
+
+        .host-selector {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .host-selector label {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 0.1em;
+        }
+
+        .host-selector select {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 8px 12px;
+            color: var(--text);
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .panel { display: none; }
+        .panel.active { display: block; }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+        }
+
+        .stat-card.blue::before { background: var(--blue); }
+        .stat-card.green::before { background: var(--green); }
+        .stat-card.red::before { background: var(--red); }
+
+        .stat-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            color: var(--muted);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .stat-value { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+        .stat-value.blue { color: var(--blue); }
+        .stat-value.green { color: var(--green); }
+        .stat-value.red { color: var(--red); }
+        .stat-change { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 6px; }
+
+        .table-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table-title { font-size: 13px; font-weight: 700; letter-spacing: 0.05em; }
+        .table-action {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: var(--blue);
+            cursor: pointer;
+            background: none;
+            border: none;
+            letter-spacing: 0.1em;
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+
+        thead th {
+            background: rgba(255,255,255,0.02);
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            color: var(--muted);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            padding: 12px 24px;
+            text-align: left;
+            font-weight: 400;
+        }
+
+        tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+        tbody tr:hover { background: var(--blue-dim); }
+        tbody tr:last-child { border-bottom: none; }
+        tbody td { padding: 14px 24px; font-size: 13px; }
+
+        .mono { font-family: 'Space Mono', monospace; font-size: 12px; }
+
+        .pill {
+            display: inline-block;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            padding: 3px 10px;
+            border-radius: 2px;
+            letter-spacing: 0.1em;
+        }
+
+        .pill-red { background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+        .pill-green { background: rgba(34,197,94,0.1); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+        .pill-orange { background: rgba(249,115,22,0.1); color: var(--orange); border: 1px solid rgba(249,115,22,0.3); }
+        .pill-yellow { background: rgba(234,179,8,0.1); color: var(--yellow); border: 1px solid rgba(234,179,8,0.3); }
+        .pill-blue { background: rgba(59,130,246,0.1); color: var(--blue); border: 1px solid rgba(59,130,246,0.3); }
+
+        /* Grafana embed */
+        .grafana-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .grafana-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+            height: 280px;
+        }
+
+        .grafana-card-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 0.1em;
+        }
+
+        .grafana-card iframe {
+            width: 100%;
+            height: calc(100% - 37px);
+            border: none;
+            background: var(--bg);
+        }
+
+        .grafana-placeholder {
+            width: 100%;
+            height: calc(100% - 37px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .grafana-placeholder .icon { font-size: 24px; opacity: 0.3; }
+
+        /* SLA bar */
+        .sla-bar { width: 80px; height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden; display: inline-block; vertical-align: middle; margin-left: 8px; }
+        .sla-fill { height: 100%; border-radius: 2px; }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <div class="sidebar-brand">
+        <span class="logo">OVERWATCH AI</span>
+        <span class="role-tag">VISUAL INSIGHTS</span>
+    </div>
+
+    <div class="nav-section">
+        <span class="nav-label">VIEWS</span>
+        <button class="nav-item active" onclick="showPanel('health')">
+            <span class="nav-icon">◈</span> Infrastructure Health
+        </button>
+        <button class="nav-item" onclick="showPanel('anomalies')">
+            <span class="nav-icon">◉</span> Anomaly Feed
+        </button>
+        <button class="nav-item" onclick="showPanel('sla')">
+            <span class="nav-icon">◷</span> SLA Status
+        </button>
+        <button class="nav-item" onclick="showPanel('grafana')">
+            <span class="nav-icon">⬡</span> Live Charts
+        </button>
+    </div>
+
+    <div class="sidebar-bottom">
+        <a href="/logout" class="nav-item danger">
+            <span class="nav-icon">→</span> Logout
+        </a>
+    </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+    <div class="topbar">
+        <div>
+            <div class="page-title" id="page-title">Infrastructure Health</div>
+            <div class="page-subtitle" id="page-subtitle">Live view of monitored hosts</div>
+        </div>
+        <div class="host-selector">
+            <label>TARGET HOST</label>
+            <select id="host-select" onchange="onHostChange()">
+                {% for host in hosts %}
+                <option value="{{ host }}">{{ host }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <!-- PANEL: HEALTH -->
+    <div class="panel active" id="panel-health">
+        <div class="stat-grid">
+            <div class="stat-card blue">
+                <div class="stat-label">Total Analyses</div>
+                <div class="stat-value blue" id="u-total">—</div>
+                <div class="stat-change">For selected host</div>
+            </div>
+            <div class="stat-card red">
+                <div class="stat-label">Anomalies Detected</div>
+                <div class="stat-value red" id="u-anomalies">—</div>
+                <div class="stat-change">Requires attention</div>
+            </div>
+            <div class="stat-card green">
+                <div class="stat-label">Last Status</div>
+                <div class="stat-value green" id="u-last-status" style="font-size:18px;">—</div>
+                <div class="stat-change mono" id="u-last-time">—</div>
+            </div>
+        </div>
+
+        <div class="table-card">
+            <div class="table-header">
+                <span class="table-title">Recent Activity</span>
+                <button class="table-action" onclick="loadHostData()">↻ Refresh</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Prediction</th>
+                        <th>Severity</th>
+                        <th>Score</th>
+                        <th>Issue</th>
+                    </tr>
+                </thead>
+                <tbody id="host-table-body">
+                    <tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted);font-family:Space Mono,monospace;font-size:12px;">Select a host and refresh</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- PANEL: ANOMALIES -->
+    <div class="panel" id="panel-anomalies">
+        <div class="table-card">
+            <div class="table-header">
+                <span class="table-title">Anomaly Feed — All Hosts</span>
+                <button class="table-action" onclick="loadAnomalies()">↻ Refresh</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Host</th>
+                        <th>Severity</th>
+                        <th>Score</th>
+                        <th>Issue</th>
+                        <th>Recommendation</th>
+                    </tr>
+                </thead>
+                <tbody id="anomaly-body">
+                    <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted);font-family:Space Mono,monospace;font-size:12px;">Click Refresh to load</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- PANEL: SLA -->
+    <div class="panel" id="panel-sla">
+        <div class="table-card">
+            <div class="table-header">
+                <span class="table-title">SLA Status — 30 Days</span>
+                <button class="table-action" onclick="loadUserSLA()">↻ Refresh</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Host</th>
+                        <th>Uptime</th>
+                        <th>Incidents</th>
+                        <th>Downtime</th>
+                        <th>SLA</th>
+                    </tr>
+                </thead>
+                <tbody id="user-sla-body">
+                    <tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted);font-family:Space Mono,monospace;font-size:12px;">Click Refresh to load</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- PANEL: GRAFANA -->
+    <div class="panel" id="panel-grafana">
+        <div class="grafana-grid">
+            <div class="grafana-card">
+                <div class="grafana-card-header">ANOMALY TIMELINE</div>
+                <div class="grafana-placeholder">
+                    <span class="icon">⬡</span>
+                    <span>Configure Grafana panel URL</span>
+                    <span style="font-size:9px;opacity:0.5">Edit user_dashboard.html → iframe src</span>
+                </div>
+            </div>
+            <div class="grafana-card">
+                <div class="grafana-card-header">SEVERITY DISTRIBUTION</div>
+                <div class="grafana-placeholder">
+                    <span class="icon">◉</span>
+                    <span>Configure Grafana panel URL</span>
+                    <span style="font-size:9px;opacity:0.5">Edit user_dashboard.html → iframe src</span>
+                </div>
+            </div>
+            <div class="grafana-card">
+                <div class="grafana-card-header">HOST ANOMALY COUNT</div>
+                <div class="grafana-placeholder">
+                    <span class="icon">◈</span>
+                    <span>Configure Grafana panel URL</span>
+                    <span style="font-size:9px;opacity:0.5">Edit user_dashboard.html → iframe src</span>
+                </div>
+            </div>
+            <div class="grafana-card">
+                <div class="grafana-card-header">AI RESULTS TABLE</div>
+                <div class="grafana-placeholder">
+                    <span class="icon">◻</span>
+                    <span>Configure Grafana panel URL</span>
+                    <span style="font-size:9px;opacity:0.5">Edit user_dashboard.html → iframe src</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+const panels = {
+    health: { title: 'Infrastructure Health', sub: 'Live view of monitored hosts' },
+    anomalies: { title: 'Anomaly Feed', sub: 'All detected anomalies across hosts' },
+    sla: { title: 'SLA Status', sub: 'Server availability over the last 30 days' },
+    grafana: { title: 'Live Charts', sub: 'Embedded Grafana visualizations' },
+};
+
+function showPanel(name) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('panel-' + name).classList.add('active');
+    document.getElementById('page-title').textContent = panels[name].title;
+    document.getElementById('page-subtitle').textContent = panels[name].sub;
+    event.currentTarget.classList.add('active');
+    if (name === 'health') loadHostData();
+    if (name === 'anomalies') loadAnomalies();
+    if (name === 'sla') loadUserSLA();
+}
+
+function onHostChange() { loadHostData(); }
+
+function severityPill(s) {
+    const map = { 'CRITICAL': 'pill-red', 'HIGH': 'pill-orange', 'MEDIUM': 'pill-yellow', 'AVERAGE': 'pill-yellow', 'LOW': 'pill-green' };
+    const cls = map[s?.toUpperCase()] || 'pill-blue';
+    return `<span class="pill ${cls}">${s || '—'}</span>`;
+}
+
+function predictionPill(p) {
+    return p === 'ANOMALY'
+        ? `<span class="pill pill-red">ANOMALY</span>`
+        : `<span class="pill pill-green">NORMAL</span>`;
+}
+
+async function loadHostData() {
+    const host = document.getElementById('host-select').value;
+    if (!host) return;
+
+    try {
+        const r = await fetch(`/api/host/${host}`);
+        const data = await r.json();
+
+        document.getElementById('u-total').textContent = data.total ?? '—';
+        document.getElementById('u-anomalies').textContent = data.anomalies ?? '—';
+
+        const last = data.last;
+        if (last) {
+            const statusEl = document.getElementById('u-last-status');
+            statusEl.textContent = last.prediction;
+            statusEl.className = 'stat-value ' + (last.prediction === 'ANOMALY' ? 'red' : 'green');
+            document.getElementById('u-last-time').textContent = last.timestamp?.slice(0,16) || '—';
+        }
+
+        const tbody = document.getElementById('host-table-body');
+        if (!data.results?.length) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--muted);font-family:Space Mono,monospace;font-size:12px;">No data for this host</td></tr>';
+            return;
+        }
+        tbody.innerHTML = data.results.map(r => `
+            <tr>
+                <td class="mono">${r.timestamp?.slice(0,16) || '—'}</td>
+                <td>${predictionPill(r.prediction)}</td>
+                <td>${severityPill(r.severity)}</td>
+                <td class="mono">${r.score ?? '—'}</td>
+                <td style="font-size:12px;color:var(--muted)">${Array.isArray(r.issues) ? r.issues[0] : r.issues || '—'}</td>
+            </tr>
+        `).join('');
+    } catch(e) {}
+}
+
+async function loadAnomalies() {
+    try {
+        const r = await fetch('/api/anomalies?limit=30');
+        const rows = await r.json();
+        const tbody = document.getElementById('anomaly-body');
+        tbody.innerHTML = rows.map(r => `
+            <tr>
+                <td class="mono">${r.timestamp?.slice(0,16) || '—'}</td>
+                <td class="mono">${r.host}</td>
+                <td>${severityPill(r.severity)}</td>
+                <td class="mono">${r.score ?? '—'}</td>
+                <td style="font-size:12px;color:var(--muted)">${Array.isArray(r.issues) ? r.issues[0] : r.issues || '—'}</td>
+                <td style="font-size:12px;color:var(--muted)">${Array.isArray(r.recommendations) ? r.recommendations[0] : r.recommendations || '—'}</td>
+            </tr>
+        `).join('') || '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted)">No anomalies found</td></tr>';
+    } catch(e) {}
+}
+
+async function loadUserSLA() {
+    try {
+        const hosts = [...document.getElementById('host-select').options].map(o => o.value);
+        const tbody = document.getElementById('user-sla-body');
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--muted);font-family:Space Mono,monospace;font-size:12px;">Loading...</td></tr>';
+        const results = await Promise.all(hosts.map(h => fetch(`/sla/${h}?days=30`).then(r => r.json())));
+        tbody.innerHTML = results.map(s => {
+            const pct = s.uptime_percentage ?? 100;
+            const good = pct >= 99.5;
+            return `<tr>
+                <td class="mono">${s.host}</td>
+                <td><span class="mono">${pct}%</span><span class="sla-bar"><span class="sla-fill" style="width:${pct}%;background:${good ? 'var(--green)' : 'var(--red)'}"></span></span></td>
+                <td class="mono">${s.incidents}</td>
+                <td class="mono">${s.total_downtime_minutes} min</td>
+                <td>${good ? '<span class="pill pill-green">GOOD</span>' : '<span class="pill pill-red">POOR</span>'}</td>
+            </tr>`;
+        }).join('');
+    } catch(e) {}
+}
+
+loadHostData();
+</script>
+</body>
+</html>

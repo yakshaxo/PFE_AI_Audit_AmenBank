@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OVERWATCH AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #03060f;
+            --surface: #080d1a;
+            --border: rgba(59, 130, 246, 0.15);
+            --blue: #3b82f6;
+            --blue-dim: rgba(59, 130, 246, 0.08);
+            --text: #e2e8f0;
+            --muted: #64748b;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: 'Syne', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Animated grid background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(59,130,246,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59,130,246,0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridMove 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(40px); }
+        }
+
+        /* Glow orb */
+        body::after {
+            content: '';
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .login-card {
+            position: relative;
+            width: 440px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 48px;
+            animation: fadeUp 0.6s ease forwards;
+            z-index: 1;
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--blue), transparent);
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .brand-logo {
+            font-family: 'Space Mono', monospace;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--blue);
+            letter-spacing: 0.2em;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .brand-sub {
+            font-size: 10px;
+            letter-spacing: 0.3em;
+            color: var(--muted);
+            text-transform: uppercase;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .divider-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            color: var(--muted);
+            letter-spacing: 0.2em;
+        }
+
+        .error-box {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 2px;
+            padding: 12px 16px;
+            margin-bottom: 24px;
+            font-size: 13px;
+            color: #fca5a5;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .field input {
+            width: 100%;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 12px 16px;
+            color: var(--text);
+            font-family: 'Space Mono', monospace;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .field input:focus {
+            border-color: var(--blue);
+            background: var(--blue-dim);
+        }
+
+        .field input::placeholder {
+            color: var(--muted);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--blue);
+            color: white;
+            border: none;
+            border-radius: 2px;
+            padding: 14px;
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 8px;
+        }
+
+        .submit-btn:hover { background: #2563eb; }
+        .submit-btn:active { transform: scale(0.98); }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 32px;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 0.1em;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: #22c55e;
+            border-radius: 50%;
+            margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="brand">
+            <span class="brand-logo">OVERWATCH AI</span>
+            <span class="brand-sub">Infrastructure Audit Layer</span>
+        </div>
+
+        <div class="divider">
+            <div class="divider-line"></div>
+            <span class="divider-text">SECURE ACCESS</span>
+            <div class="divider-line"></div>
+        </div>
+
+        {% if error %}
+        <div class="error-box">⚠ {{ error }}</div>
+        {% endif %}
+
+        <form action="/login" method="post">
+            <div class="field">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Enter username" required autocomplete="off">
+            </div>
+            <div class="field">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="submit-btn">→ Access System</button>
+        </form>
+
+        <div class="footer-note">
+            <span class="status-dot"></span>
+            All systems operational 
+        </div>
+    </div>
+</body>
+</html>
