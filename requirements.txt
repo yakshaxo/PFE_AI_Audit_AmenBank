@@ -6,10 +6,9 @@ python-multipart
 jinja2
 
 # Security
-python-jose[cryptography]
-passlib[bcrypt]
 bcrypt==4.0.1
 passlib[bcrypt]
+python-jose[cryptography]
 
 # AI & Data
 numpy
@@ -25,4 +24,4 @@ requests
 # Visuals & Reports
 matplotlib
 seaborn
-fpdf
+reportlab

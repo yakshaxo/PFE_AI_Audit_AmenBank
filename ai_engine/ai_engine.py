@@ -1,8 +1,9 @@
 import logging
+# REMOVED THE DOTS: In Docker, these are now top-level modules
 from adapter import detect_anomaly, get_recommendation, load_model
 from database import save_audit_result 
 
-logger = logging.getLogger("AmenBank-AI-Engine")
+logger = logging.getLogger("NEXUS-AI-Engine")
 
 class AILogicCenter:
     def __init__(self):
@@ -11,9 +12,9 @@ class AILogicCenter:
     def load_brain(self):
         try:
             self.model = load_model()
-            logger.info("AI Brain loaded successfully.")
+            logger.info("NEXUS AI Brain loaded successfully.")
         except Exception as e:
-            logger.error(f"AI Brain Load Failed: {e}")
+            logger.error(f"NEXUS AI Brain Load Failed: {e}")
 
     def analyze_and_store(self, host, value, item_key, severity):
         result = detect_anomaly(self.model, value, item_key, severity)
