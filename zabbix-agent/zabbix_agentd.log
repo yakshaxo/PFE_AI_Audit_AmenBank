@@ -186,3 +186,19 @@
  13968:20260424:173100.537 Active check configuration update started to fail
  13112:20260424:173104.821 failed to accept an incoming connection: from 192.168.100.117: unspecified certificate verification error: TLS handshake set result code to 1: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"
  13968:20260424:173200.302 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260424:213147.821 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+ 13968:20260424:213147.824 Active check configuration update started to fail
+  8096:20260425:204701.776 SSL_shutdown() with 192.168.100.117 set result code to 5:
+ 13968:20260425:204755.655 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260425:204958.688 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: (null)]
+ 13968:20260425:204958.690 Active check configuration update started to fail
+ 13968:20260426:132738.904 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260426:132941.026 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: Connection refused.]
+ 13968:20260426:132941.027 Active check configuration update started to fail
+ 13968:20260426:133144.221 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260426:135545.041 Unable to connect to [192.168.100.117]:10051 [TCP successful, cannot establish TLS to [[192.168.100.117]:10051]: SSL_connect() set result code to SSL_ERROR_SSL: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"]
+ 13968:20260426:135545.042 Active check configuration update started to fail
+ 13968:20260426:135645.562 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260426:140059.268 the system time has been pushed back, adjusting active check schedule
+ 13968:20260426:010102.472 the system time has been pushed back, adjusting active check schedule
+ 13968:20260426:010501.875 the system time has been pushed back, adjusting active check schedule

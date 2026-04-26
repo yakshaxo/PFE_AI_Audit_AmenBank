@@ -79,9 +79,12 @@ services:
   pfe_grafana:
     container_name: pfe_grafana
     image: grafana/grafana-oss:latest
+    user: "0"  # <--- Added to fix the readonly SQLite database error
     restart: always
     ports:
       - "3000:3000"
+    volumes:
+      - ./grafana_data:/var/lib/grafana  # <--- Added for persistence
     networks:
       - nexus_net
     depends_on:
