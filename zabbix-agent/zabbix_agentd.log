@@ -202,3 +202,58 @@
  13968:20260426:140059.268 the system time has been pushed back, adjusting active check schedule
  13968:20260426:010102.472 the system time has been pushed back, adjusting active check schedule
  13968:20260426:010501.875 the system time has been pushed back, adjusting active check schedule
+ 13968:20260426:141732.568 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: Connection refused.]
+ 13968:20260426:141732.580 Active check configuration update started to fail
+ 13968:20260427:201334.740 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260427:214740.055 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: (null)]
+ 13968:20260427:214740.056 Active check configuration update started to fail
+ 13968:20260427:214840.567 Active check configuration update from [192.168.100.117:10051] is working again
+ 13112:20260427:220302.382 failed to accept an incoming connection: from 192.168.100.117: unspecified certificate verification error: TLS handshake set result code to 1: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"
+  8096:20260427:220302.383 failed to accept an incoming connection: from 192.168.100.117: unspecified certificate verification error: TLS handshake set result code to 1: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"
+  8096:20260427:224427.898 failed to accept an incoming connection: from 192.168.100.117: unspecified certificate verification error: TLS handshake set result code to 1: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"
+ 13112:20260427:224427.899 failed to accept an incoming connection: from 192.168.100.117: unspecified certificate verification error: TLS handshake set result code to 1: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"
+  8096:20260427:225014.444 failed to accept an incoming connection: from 192.168.100.117: unspecified certificate verification error: TLS handshake set result code to 1: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"
+ 13112:20260427:225014.445 failed to accept an incoming connection: from 192.168.100.117: unspecified certificate verification error: TLS handshake set result code to 1: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"
+  2520:20260427:230337.138 failed to accept an incoming connection: from 192.168.100.117: unspecified certificate verification error: TLS handshake set result code to 1: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"
+  8096:20260427:230337.141 failed to accept an incoming connection: from 192.168.100.117: unspecified certificate verification error: TLS handshake set result code to 1: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"
+ 13968:20260427:231646.001 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: Connection refused.]
+ 13968:20260427:231646.003 Active check configuration update started to fail
+ 13968:20260428:203747.873 the system time has been pushed back, adjusting active check schedule
+ 13968:20260428:211459.499 Active check configuration update from [192.168.100.117:10051] is working again
+  8096:20260428:221120.258 SSL_shutdown() with 192.168.100.117 set result code to 5:
+  2520:20260428:221120.261 SSL_shutdown() with 192.168.100.117 set result code to 5:
+ 13968:20260429:202916.076 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+ 13968:20260429:202916.091 Active check configuration update started to fail
+ 13968:20260429:203727.650 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260429:204129.812 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: Connection refused.]
+ 13968:20260429:204129.813 Active check configuration update started to fail
+ 13968:20260429:204229.360 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260429:204634.526 Unable to receive from [192.168.100.117]:10051 [SSL_read() I/O error: [0x0000274C] Une tentative de connexion a échoué car le parti connecté n’a pas répondu convenablement au-delà d’une certaine durée ou une connexion établie a échoué car l’hôte de connexion n’a pas répondu.]
+ 13968:20260429:204634.527 Active check configuration update started to fail
+ 13968:20260429:204734.376 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260429:213942.007 Unable to receive from [192.168.100.117]:10051 [SSL_read() I/O error: [0x0000274C] Une tentative de connexion a échoué car le parti connecté n’a pas répondu convenablement au-delà d’une certaine durée ou une connexion établie a échoué car l’hôte de connexion n’a pas répondu.]
+ 13968:20260429:213942.008 Active check configuration update started to fail
+ 13968:20260429:214042.650 Active check configuration update from [192.168.100.117:10051] is working again
+  8096:20260429:231909.048 SSL_shutdown() with 192.168.100.117 set result code to 5:
+ 13112:20260429:231909.145 SSL_shutdown() with 192.168.100.117 set result code to 5:
+ 13968:20260430:164843.994 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+ 13968:20260430:164843.995 Active check configuration update started to fail
+ 13968:20260430:164941.324 the system time has been pushed back, adjusting active check schedule
+ 13968:20260430:213601.155 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260430:215402.119 Unable to connect to [192.168.100.117]:10051 [TCP successful, cannot establish TLS to [[192.168.100.117]:10051]: SSL_connect() set result code to SSL_ERROR_SSL: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"]
+ 13968:20260430:215402.120 Active check configuration update started to fail
+ 13968:20260430:215502.580 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260501:152729.042 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+ 13968:20260501:152729.066 Active check configuration update started to fail
+ 13968:20260504:192926.990 the system time has been pushed back, adjusting active check schedule
+ 13968:20260509:114720.049 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260509:160626.041 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+ 13968:20260509:160626.042 Active check configuration update started to fail
+ 13968:20260509:160726.973 Active check configuration update from [192.168.100.117:10051] is working again
+ 13112:20260509:173923.089 SSL_shutdown() with 192.168.100.117 set result code to 5:
+  2520:20260509:173923.095 SSL_shutdown() with 192.168.100.117 set result code to 5:
+ 13968:20260509:173929.812 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: Connection refused.]
+ 13968:20260509:173929.812 Active check configuration update started to fail
+ 13968:20260510:204002.138 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260510:215608.667 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: (null)]
+ 13968:20260510:215608.668 Active check configuration update started to fail

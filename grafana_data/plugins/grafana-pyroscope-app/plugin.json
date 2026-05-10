@@ -7,7 +7,25 @@
     "backend": false,
     "preload": true,
     "languages": [
-        "en-US"
+        "en-US",
+        "cs-CZ",
+        "de-DE",
+        "es-ES",
+        "fr-FR",
+        "hu-HU",
+        "id-ID",
+        "it-IT",
+        "ja-JP",
+        "ko-KR",
+        "nl-NL",
+        "pl-PL",
+        "pt-BR",
+        "pt-PT",
+        "ru-RU",
+        "sv-SE",
+        "tr-TR",
+        "zh-Hans",
+        "zh-Hant"
     ],
     "dependencies": {
         "grafanaDependency": ">=11.6.11 <12 || >=12.0.10 <12.1 || >=12.1.7 <12.2 || >=12.2.5",
@@ -44,8 +62,8 @@
                 "path": "img/hero-image.png"
             }
         ],
-        "version": "2.0.4",
-        "updated": "2026-04-20",
+        "version": "2.0.5",
+        "updated": "2026-04-30",
         "links": [
             {
                 "name": "GitHub",

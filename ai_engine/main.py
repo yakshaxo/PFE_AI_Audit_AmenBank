@@ -8,8 +8,10 @@ from datetime import datetime
 from typing import Optional, Union
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request, Form, HTTPException
-from fastapi.responses import HTMLResponse, RedirectResponse, StreamingResponse, FileResponse
+from fastapi import FastAPI, Request, Form, HTTPException, Depends, Header
+from fastapi.responses import HTMLResponse, RedirectResponse, StreamingResponse, FileResponse, JSONResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
+from starlette.middleware.sessions import SessionMiddleware 
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
@@ -29,7 +31,7 @@ from auth import verify_password
 from ai_engine import engine
 from sla_calculator import calculate_sla
 
-# ── 3. APP SETUP ────────────────────────────────────────────
+# ── 3. APP SETUP & PROFESSIONAL ERROR HANDLING ──────────────
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("uvicorn")
 
@@ -43,8 +45,44 @@ async def lifespan(app: FastAPI):
         logger.error(f"Brain Failed: {e}")
     yield
 
-app = FastAPI(title="NEXUS Intelligence System", lifespan=lifespan)
+is_debug = os.getenv("DEBUG", "False").lower() == "true"
+app = FastAPI(title="NEXUS Intelligence System", lifespan=lifespan, debug=is_debug)
+
+# --- ANTI-CACHING MIDDLEWARE ---
+@app.middleware("http")
+async def no_cache_middleware(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
+
+# Implement Secure Signed Sessions
+app.add_middleware(
+    SessionMiddleware, 
+    secret_key=os.getenv("SECRET_KEY", "fallback-secret-key-change-me"),
+    session_cookie="nexus_session",
+    max_age=1800, 
+    same_site=os.getenv("SESSION_COOKIE_SAMESITE", "lax").lower(),
+    https_only=os.getenv("SESSION_COOKIE_SECURE", "False").lower() == "true"
+)
+
 templates = Jinja2Templates(directory=os.path.join(current_dir, "templates"))
+
+@app.exception_handler(StarletteHTTPException)
+async def custom_http_exception_handler(request: Request, exc: StarletteHTTPException):
+    if exc.status_code == 404:
+        logger.warning(f"404 Not Found Accessed: {request.url}")
+        try:
+            return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
+        except:
+            return HTMLResponse("<h1>404 - Not Found</h1>", status_code=404)
+    return JSONResponse(status_code=exc.status_code, content={"status": "error", "message": str(exc.detail)})
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.error(f"Internal Server Error: {exc}")
+    return JSONResponse(status_code=500, content={"status": "error", "message": "An internal system error occurred. Please contact the administrator."})
 
 # ── 4. DATA MODELS ──────────────────────────────────────────
 class AuditPayload(BaseModel):
@@ -58,23 +96,35 @@ class FlagPayload(BaseModel):
     username: str
     reason: str
 
-# ── HELPERS ─────────────────────────────────────────────────
+# ── 5. SECURITY DEPENDENCIES (NEW) ──────────────────────────
+API_KEY_CREDENTIAL = os.getenv("INTERNAL_API_KEY", "amen-bank-secure-key-2026")
+
 def get_current_user(request: Request):
-    return {
-        "username": request.cookies.get("nexus_user"),
-        "role":     request.cookies.get("nexus_role"),
-    }
+    user = request.session.get("nexus_user")
+    role = str(request.session.get("nexus_role")).strip() if request.session.get("nexus_role") else None
+    return {"username": user, "role": role}
 
-def require_admin(request: Request):
+def verify_logged_in(request: Request):
+    """Ensures the user has an active session for API calls."""
     u = get_current_user(request)
-    return u if u["role"] == "1" else None
+    if not u["username"]:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    return u
 
-def require_login(request: Request):
+def verify_admin(request: Request):
+    """Ensures the user is an admin for API calls."""
     u = get_current_user(request)
-    return u if u["username"] else None
+    if not u["username"] or u["role"] != "1":
+        raise HTTPException(status_code=403, detail="Admin privileges required")
+    return u
 
-# ── 5. AUTH ──────────────────────────────────────────────────
+def verify_machine_key(x_api_key: str = Header(None)):
+    """API Key check for automated engine/webhook calls."""
+    if x_api_key != API_KEY_CREDENTIAL:
+        raise HTTPException(status_code=403, detail="Invalid Machine API Key")
+    return x_api_key
 
+# ── 6. AUTH & UI ROUTES (UI keeps manual checks for redirects) 
 @app.get("/", response_class=HTMLResponse)
 async def root():
     return RedirectResponse(url="/login", status_code=302)
@@ -83,10 +133,7 @@ async def root():
 async def login_page(request: Request):
     u = get_current_user(request)
     if u["username"]:
-        return RedirectResponse(
-            url="/admin_dashboard" if u["role"] == "1" else "/user_dashboard",
-            status_code=302
-        )
+        return RedirectResponse(url="/admin_dashboard" if u["role"] == "1" else "/user_dashboard", status_code=302)
     return templates.TemplateResponse("login.html", {"request": request})
 
 @app.post("/login")
@@ -95,13 +142,8 @@ async def login(request: Request):
     username = str(form.get("username", "")).strip()
     password = str(form.get("password", ""))
 
-    logger.info(f"LOGIN ATTEMPT: '{username}'")
-
     if not username or not password:
-        return templates.TemplateResponse("login.html", {
-            "request": request,
-            "error": "Username and password are required."
-        })
+        return templates.TemplateResponse("login.html", {"request": request, "error": "Username and password are required."})
 
     conn = get_db_connection()
     cur  = conn.cursor()
@@ -109,275 +151,136 @@ async def login(request: Request):
     row = cur.fetchone()
     conn.close()
 
-    if not row:
-        logger.warning(f"LOGIN FAIL: '{username}' not found")
-        return templates.TemplateResponse("login.html", {
-            "request": request, "error": "Invalid username or password."
-        })
+    if not row or not verify_password(password, str(row[0])):
+        logger.warning(f"LOGIN FAIL: wrong credentials for '{username}'")
+        return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid username or password."})
 
-    stored_hash = str(row[0])
-    role_id     = str(row[1]).strip()
-
-    if not verify_password(password, stored_hash):
-        logger.warning(f"LOGIN FAIL: wrong password for '{username}'")
-        return templates.TemplateResponse("login.html", {
-            "request": request, "error": "Invalid username or password."
-        })
-
+    role_id = str(row[1]).strip()
     logger.info(f"LOGIN OK: '{username}' role={role_id}")
+    
+    request.session["nexus_user"] = username
+    request.session["nexus_role"] = role_id
+
     dest = "/admin_dashboard" if role_id == "1" else "/user_dashboard"
     resp = RedirectResponse(url=dest, status_code=303)
-    resp.set_cookie("nexus_user", username, httponly=True, samesite="lax")
-    resp.set_cookie("nexus_role", role_id,  httponly=True, samesite="lax")
+    resp.delete_cookie("nexus_user")
+    resp.delete_cookie("nexus_role")
     return resp
 
 @app.get("/logout")
-async def logout():
+async def logout(request: Request):
+    request.session.clear()
     resp = RedirectResponse(url="/login", status_code=303)
     resp.delete_cookie("nexus_user")
     resp.delete_cookie("nexus_role")
     return resp
 
-# ── 6. PASSWORD RESET ────────────────────────────────────────
-
-@app.get("/reset-password", response_class=HTMLResponse)
-async def reset_password_view(request: Request):
-    return templates.TemplateResponse("reset_password.html", {"request": request})
-
-@app.post("/api/reset-password")
-async def handle_reset(request: Request):
-    form         = await request.form()
-    username     = str(form.get("username",     "")).strip()
-    email        = str(form.get("email",        "")).strip()
-    new_password = str(form.get("new_password", ""))
-
-    if not all([username, email, new_password]):
-        return templates.TemplateResponse("reset_password.html", {
-            "request": request, "error": "All fields are required."
-        })
-
-    hashed = bcrypt.hashpw(new_password.encode(), bcrypt.gensalt()).decode()
-    conn   = get_db_connection()
-    cur    = conn.cursor()
-    cur.execute(
-        "UPDATE users SET passwd=%s WHERE username ILIKE %s AND email ILIKE %s",
-        (hashed, username, email)
-    )
-    updated = cur.rowcount
-    conn.commit()
-    conn.close()
-
-    if not updated:
-        return templates.TemplateResponse("reset_password.html", {
-            "request": request,
-            "error": "No account found with that username and email."
-        })
-    return RedirectResponse(url="/login?msg=reset_success", status_code=303)
-
-# ── 7. DASHBOARDS ────────────────────────────────────────────
-
 @app.get("/admin_dashboard", response_class=HTMLResponse)
 async def admin_view(request: Request):
-    u = require_admin(request)
-    if not u:
+    u = get_current_user(request)
+    if not u["username"] or u["role"] != "1":
         return RedirectResponse(url="/login?error=Unauthorized", status_code=303)
+
     return templates.TemplateResponse("admin_dashboard.html", {
-        "request": request,
-        "hosts":   fetch_unique_hosts(),
-        "users":   fetch_all_users(),
-        "username": u["username"],
+        "request": request, "hosts": fetch_unique_hosts(), 
+        "users": fetch_all_users(), "username": u["username"]
     })
 
 @app.get("/user_dashboard", response_class=HTMLResponse)
 async def user_view(request: Request):
-    u = require_login(request)
-    if not u:
+    u = get_current_user(request)
+    if not u["username"] or u["role"] != "2":
+        if u["role"] == "1":
+            return RedirectResponse(url="/admin_dashboard", status_code=303)
         return RedirectResponse(url="/login", status_code=303)
+
     return templates.TemplateResponse("user_dashboard.html", {
-        "request":  request,
-        "hosts":    fetch_unique_hosts(),
-        "username": u["username"],
+        "request": request, "hosts": fetch_unique_hosts(), "username": u["username"]
     })
 
-# ── 8. USER MANAGEMENT ───────────────────────────────────────
+# ── 7. PROTECTED API ENDPOINTS ──────────────────────────────
 
 @app.post("/admin/create-user")
-async def create_user(request: Request):
-    if not require_admin(request):
-        return RedirectResponse(url="/login", status_code=303)
-
-    form     = await request.form()
+async def create_user(request: Request, u=Depends(verify_admin)):
+    form = await request.form()
     username = str(form.get("username", "")).strip()
-    # email is OPTIONAL — the HTML input has no required attribute
-    email    = str(form.get("email",    "")).strip() or None
+    email = str(form.get("email", "")).strip() or None
     password = str(form.get("password", ""))
-    roleid   = int(form.get("roleid",   2))
-
-    logger.info(f"CREATE USER: {username} role={roleid}")
-
-    if not username or not password:
-        return RedirectResponse(
-            url="/admin_dashboard?error=missing_fields", status_code=303
-        )
+    roleid = int(form.get("roleid", 2))
 
     hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
-    try:
-        conn = get_db_connection()
-        cur  = conn.cursor()
-        cur.execute(
-            "INSERT INTO users (username, email, passwd, roleid) VALUES (%s,%s,%s,%s)",
-            (username, email, hashed, roleid)
-        )
-        conn.commit()
-        conn.close()
-        logger.info(f"USER CREATED: {username}")
-    except Exception as e:
-        logger.error(f"CREATE USER FAIL: {e}")
-        return RedirectResponse(
-            url="/admin_dashboard?error=db_error", status_code=303
-        )
-
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("INSERT INTO users (username, email, passwd, roleid) VALUES (%s,%s,%s,%s)", (username, email, hashed, roleid))
+    conn.commit()
+    conn.close()
     return RedirectResponse(url="/admin_dashboard", status_code=303)
 
-# ── 9. AI / MONITORING APIs ──────────────────────────────────
-
 @app.get("/api/summary")
-async def get_summary():
+async def get_summary(u=Depends(verify_logged_in)):
     s = fetch_audit_summary()
-    return {
-        "total":    s.get("total",    0),
-        "critical": s.get("critical", 0),
-        "hosts":    len(fetch_unique_hosts()),
-    }
+    return {"total": s.get("total", 0), "critical": s.get("critical", 0), "hosts": len(fetch_unique_hosts())}
 
 @app.get("/api/logs")
-async def get_logs(limit: int = 100):
-    """Admin dashboard overview + logs panel."""
+async def get_logs(limit: int = 100, u=Depends(verify_admin)):
     conn = get_db_connection()
-    cur  = conn.cursor()
-    cur.execute("""
-        SELECT id, host, prediction, severity, score,
-               issues, recommendations, timestamp
-        FROM   ai_results
-        ORDER  BY timestamp DESC
-        LIMIT  %s
-    """, (limit,))
+    cur = conn.cursor()
+    cur.execute("SELECT id, host, prediction, severity, score, issues, recommendations, timestamp FROM ai_results ORDER BY timestamp DESC LIMIT %s", (limit,))
     rows = cur.fetchall()
-    cur.close()
     conn.close()
-    return [
-        {
-            "id":              r[0],
-            "host":            r[1],
-            "prediction":      r[2],
-            "severity":        r[3],
-            "score":           r[4],
-            "issues":          r[5],
-            "recommendations": r[6],
-            "timestamp":       str(r[7]),
-        }
-        for r in rows
-    ]
+    return [{"id": r[0], "host": r[1], "prediction": r[2], "severity": r[3], "score": r[4], "issues": r[5], "recommendations": r[6], "timestamp": str(r[7])} for r in rows]
 
 @app.get("/api/host/{host}")
-async def get_host_data(host: str):
+async def get_host_data(host: str, u=Depends(verify_logged_in)):
     return {"stats": fetch_host_stats(host), "logs": fetch_host_logs(host, limit=20)}
 
 @app.get("/api/anomalies")
-async def get_anomalies(limit: int = 30):
+async def get_anomalies(limit: int = 30, u=Depends(verify_logged_in)):
     return fetch_recent_anomalies(limit)
 
-@app.post("/analyze")
+@app.get("/api/sla/{host}")
+async def get_sla(host: str, days: int = 30, u=Depends(verify_logged_in)):
+    return calculate_sla(host, days)
+
+@app.post("/api/flag")
+async def create_flag(payload: FlagPayload, u=Depends(verify_logged_in)):
+    save_flag(payload.audit_id, payload.username, payload.reason)
+    return {"status": "success", "message": "Flagged. Admin will review."}
+
+@app.get("/api/flags")
+async def get_flags(u=Depends(verify_admin)):
+    return fetch_pending_flags()
+
+@app.post("/api/flag/{flag_id}/{action}")
+async def resolve_item(flag_id: int, action: str, u=Depends(verify_admin)):
+    resolve_flag(flag_id, action)
+    return {"status": "success", "action": action}
+
+@app.get("/api/download-report")
+async def download_report(u=Depends(verify_logged_in)):
+    t, c, p = get_zabbix_stats()
+    filename = generate_pdf(t, c, p, get_ai_stats(), get_sla_stats())
+    return FileResponse(path=filename, filename=f"NEXUS_Report_{datetime.now().strftime('%Y%m%d')}.pdf", media_type="application/pdf")
+
+@app.get("/api/export/csv")
+async def export_csv(type: str = "all", u=Depends(verify_admin)):
+    conn = get_db_connection()
+    query = "SELECT * FROM ai_results WHERE prediction='ANOMALY'" if type == "anomalies" else "SELECT * FROM ai_results"
+    df = pd.read_sql(query, conn)
+    conn.close()
+    buf = io.StringIO()
+    df.to_csv(buf, index=False)
+    return StreamingResponse(iter([buf.getvalue()]), media_type="text/csv", headers={"Content-Disposition": "attachment; filename=NEXUS_Data.csv"})
+
+# ── 8. MACHINE API (Requires INTERNAL_API_KEY) ──────────────
+@app.post("/analyze", dependencies=[Depends(verify_machine_key)])
 async def api_analyze(data: AuditPayload):
     result = engine.analyze_and_store(data.host, data.value, data.item_key, data.severity)
     return {**data.dict(), **result}
 
-@app.post("/webhook")
+@app.post("/webhook", dependencies=[Depends(verify_machine_key)])
 async def webhook(data: AuditPayload):
     return await api_analyze(data)
-
-# ── 10. SLA ──────────────────────────────────────────────────
-
-@app.get("/api/sla/{host}")
-async def get_sla(host: str, days: int = 30):
-    return calculate_sla(host, days)
-
-# ── 11. FLAGGING ─────────────────────────────────────────────
-
-@app.post("/api/flag")
-async def create_flag(payload: FlagPayload):
-    """
-    User sends: { audit_id, username, reason }
-    Saved to flags table → appears in admin /api/flags
-    """
-    try:
-        logger.info(f"FLAG ATTEMPT: audit_id={payload.audit_id} by {payload.username}")
-        save_flag(payload.audit_id, payload.username, payload.reason)
-        return {"status": "success", "message": "Flagged. Admin will review."}
-    except Exception as e:
-        logger.error(f"FLAG FAIL: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/api/flags")
-async def get_flags():
-    """Admin inbox — returns all pending flags joined with audit data."""
-    return fetch_pending_flags()
-
-@app.post("/api/flag/{flag_id}/{action}")
-async def resolve_item(flag_id: int, action: str):
-    if action not in ["confirm", "dismiss"]:
-        raise HTTPException(status_code=400, detail="Action must be confirm or dismiss")
-    resolve_flag(flag_id, action)
-    return {"status": "success", "action": action}
-
-# ── 12. EXPORTS ──────────────────────────────────────────────
-
-@app.get("/api/download-report")
-async def download_report():
-    try:
-        t, c, p  = get_zabbix_stats()
-        filename = generate_pdf(t, c, p, get_ai_stats(), get_sla_stats())
-        return FileResponse(
-            path=filename,
-            filename=f"NEXUS_Report_{datetime.now().strftime('%Y%m%d')}.pdf",
-            media_type="application/pdf",
-        )
-    except Exception as e:
-        logger.error(f"PDF error: {e}")
-        raise HTTPException(status_code=500, detail="PDF generation failed")
-
-@app.get("/api/export/csv")
-async def export_csv(type: str = "all"):
-    conn  = get_db_connection()
-    query = ("SELECT * FROM ai_results WHERE prediction='ANOMALY'"
-             if type == "anomalies" else "SELECT * FROM ai_results")
-    df    = pd.read_sql(query, conn)
-    conn.close()
-    buf   = io.StringIO()
-    df.to_csv(buf, index=False)
-    return StreamingResponse(
-        iter([buf.getvalue()]),
-        media_type="text/csv",
-        headers={"Content-Disposition": "attachment; filename=NEXUS_Data.csv"},
-    )
-
-# ── 13. DEV BACKDOOR (Fix Admin Password) ────────────────────
-
-@app.get("/dev/fix-admin")
-async def dev_fix_admin():
-    """TEMPORARY ROUTE to fix password corruption caused by PowerShell."""
-    try:
-        hashed = bcrypt.hashpw(b"admin123", bcrypt.gensalt()).decode()
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute("UPDATE users SET passwd=%s WHERE username='admin'", (hashed,))
-        conn.commit()
-        conn.close()
-        logger.info("DEV: Admin password securely reset to 'admin123'")
-        return {"status": "success", "message": "Admin password securely fixed to 'admin123'"}
-    except Exception as e:
-        logger.error(f"DEV FIX FAIL: {e}")
-        return {"status": "error", "message": str(e)}
 
 if __name__ == "__main__":
     import uvicorn

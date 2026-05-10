@@ -25,3 +25,6 @@ requests
 matplotlib
 seaborn
 reportlab
+
+starlette
+itsdangerous

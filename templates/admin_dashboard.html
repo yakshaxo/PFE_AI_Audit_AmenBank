@@ -203,12 +203,15 @@
                 </div>
                 <div id="grafana-wrapper" style="position:relative;background:var(--bg);border-top:1px solid var(--border);">
                     <iframe
-                        id="grafana-frame"
-                        class="grafana-frame"
-                        src="http://localhost:3000/public-dashboards/ea94e0bc22464d0180cac576cd335275?orgId=1&refresh=5s"
-                        title="Grafana Dashboard"
-                        onload="grafanaLoaded()"
-                        onerror="grafanaFailed()">
+                    id="grafana-frame"
+                    class="grafana-frame"
+                    src="http://localhost:3000/public-dashboards/ea94e0bc22464d0180cac576cd335275?orgId=1&from=now-30d&to=now&refresh=5s&kiosk" 
+                    width="100%" 
+                    height="450" 
+                    frameborder="0"
+                    title="Grafana Dashboard"
+                    onload="grafanaLoaded()"
+                    onerror="grafanaFailed()">
                     </iframe>
                     <div id="grafana-placeholder" style="
                         display:none; position:absolute; inset:0;

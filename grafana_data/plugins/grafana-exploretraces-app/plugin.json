@@ -5,6 +5,9 @@
     "id": "grafana-exploretraces-app",
     "preload": true,
     "autoEnabled": true,
+    "languages": [
+        "en-US"
+    ],
     "info": {
         "keywords": [
             "app",
@@ -34,8 +37,8 @@
                 "path": "img/errors-root-cause.png"
             }
         ],
-        "version": "2.0.2",
-        "updated": "2026-04-20",
+        "version": "2.0.3",
+        "updated": "2026-04-30",
         "links": [
             {
                 "name": "Github",
@@ -63,7 +66,6 @@
         "extensions": {
             "exposedComponents": [
                 "grafana-asserts-app/entity-assertions-widget/v1",
-                "grafana-asserts-app/insights-timeline-widget/v1",
                 "grafana-adaptivetraces-app/span-latency/v1",
                 "grafana/query-library-context/v1"
             ]
@@ -89,13 +91,6 @@
                 ],
                 "title": "Asserts widget",
                 "description": "A block with assertions for a given service"
-            },
-            {
-                "targets": [
-                    "grafana-asserts-app/insights-timeline-widget/v1"
-                ],
-                "title": "Insights Timeline Widget",
-                "description": "Widget for displaying insights timeline in other apps"
             },
             {
                 "targets": [

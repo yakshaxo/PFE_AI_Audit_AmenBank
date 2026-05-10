@@ -423,6 +423,13 @@
       "nav": "Onboarding"
     }
   },
+  "optimize-code": {
+    "context": {
+      "title": "Annotated source code and optimization instructions"
+    },
+    "error": "Failed to build optimization context",
+    "prompt": "Optimize this code based on the profiling annotations."
+  },
   "panel-box": {
     "cancel-query": "Cancel query",
     "loading-bar": "Panel loading bar",
