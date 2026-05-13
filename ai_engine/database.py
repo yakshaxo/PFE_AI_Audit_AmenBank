@@ -227,3 +227,19 @@ def resolve_flag(flag_id, status='resolved'):
     finally:
         cur.close()
         conn.close()
+        
+def purge_old_ai_results(days_to_keep=30):
+    """Data Retention Policy: Deletes historical predictions to manage storage footprint."""
+    conn = None
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        query = "DELETE FROM ai_results WHERE timestamp < NOW() - INTERVAL '%s days';"
+        cur.execute(query, (days_to_keep,))
+        conn.commit()
+        logger.info(f"Database Maintenance: Purged AI results older than {days_to_keep} days.")
+    except Exception as e:
+        logger.error(f"Database Maintenance Error: Purge routine failed: {e}")
+    finally:
+        if conn:
+            conn.close()

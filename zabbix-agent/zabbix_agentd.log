@@ -257,3 +257,83 @@
  13968:20260510:204002.138 Active check configuration update from [192.168.100.117:10051] is working again
  13968:20260510:215608.667 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: (null)]
  13968:20260510:215608.668 Active check configuration update started to fail
+ 15808:20260511:205143.531 Zabbix Agent received shutdown request.
+ 15808:20260511:205144.552 Zabbix Agent stopped. Zabbix 6.0.44 (revision f0d913a2812).
+  6116:20260511:205211.186 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  6116:20260511:205211.187 **** Enabled features ****
+  6116:20260511:205211.187 IPv6 support:          YES
+  6116:20260511:205211.187 TLS support:           YES
+  6116:20260511:205211.187 **************************
+  6116:20260511:205211.187 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  6116:20260511:205212.772 agent #0 started [main process]
+  7916:20260511:205212.772 agent #1 started [collector]
+  7920:20260511:205212.773 agent #2 started [listener #1]
+  7924:20260511:205212.773 agent #3 started [listener #2]
+  7928:20260511:205212.773 agent #4 started [listener #3]
+  7932:20260511:205212.773 agent #5 started [active checks #1]
+  7932:20260511:205212.786 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+  7932:20260511:205212.786 Active check configuration update started to fail
+  7932:20260511:205414.950 Active check configuration update from [192.168.100.117:10051] is working again
+  5824:20260511:210201.530 Zabbix Agent received shutdown request.
+  5824:20260511:210202.511 Zabbix Agent stopped. Zabbix 6.0.44 (revision f0d913a2812).
+  6504:20260511:210226.225 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  6504:20260511:210226.226 **** Enabled features ****
+  6504:20260511:210226.227 IPv6 support:          YES
+  6504:20260511:210226.227 TLS support:           YES
+  6504:20260511:210226.227 **************************
+  6504:20260511:210226.227 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  6504:20260511:210227.604 agent #0 started [main process]
+  7920:20260511:210227.605 agent #1 started [collector]
+  7924:20260511:210227.605 agent #2 started [listener #1]
+  7928:20260511:210227.605 agent #3 started [listener #2]
+  7932:20260511:210227.605 agent #4 started [listener #3]
+  7936:20260511:210227.605 agent #5 started [active checks #1]
+  7936:20260511:210227.618 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+  7936:20260511:210227.618 Active check configuration update started to fail
+  7936:20260511:210837.956 Active check configuration update from [192.168.100.117:10051] is working again
+  6040:20260511:211512.526 Zabbix Agent received shutdown request.
+  6040:20260511:211513.432 Zabbix Agent stopped. Zabbix 6.0.44 (revision f0d913a2812).
+  6224:20260511:211537.897 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  6224:20260511:211537.897 **** Enabled features ****
+  6224:20260511:211537.898 IPv6 support:          YES
+  6224:20260511:211537.898 TLS support:           YES
+  6224:20260511:211537.898 **************************
+  6224:20260511:211537.898 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  6224:20260511:211539.388 agent #0 started [main process]
+  7972:20260511:211539.389 agent #1 started [collector]
+  7976:20260511:211539.389 agent #2 started [listener #1]
+  7980:20260511:211539.389 agent #3 started [listener #2]
+  7984:20260511:211539.389 agent #4 started [listener #3]
+  7988:20260511:211539.389 agent #5 started [active checks #1]
+  7988:20260511:211539.397 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+  7988:20260511:211539.397 Active check configuration update started to fail
+  7988:20260511:211739.516 Active check configuration update from [192.168.100.117:10051] is working again
+  7988:20260511:213341.862 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: Connection refused.]
+  7988:20260511:213341.863 Active check configuration update started to fail
+  7988:20260511:213441.383 Active check configuration update from [192.168.100.117:10051] is working again
+  7988:20260511:222444.792 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: Connection refused.]
+  7988:20260511:222444.794 Active check configuration update started to fail
+  7988:20260512:071532.724 Active check configuration update from [192.168.100.117:10051] is working again
+  7988:20260512:071734.730 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: Connection refused.]
+  7988:20260512:071734.731 Active check configuration update started to fail
+  7988:20260512:195156.219 Active check configuration update from [192.168.100.117:10051] is working again
+  7988:20260512:213110.077 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+  7988:20260512:213110.087 Active check configuration update started to fail
+  7988:20260512:213417.864 Active check configuration update from [192.168.100.117:10051] is working again
+  7988:20260512:224222.984 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: Connection refused.]
+  7988:20260512:224222.985 Active check configuration update started to fail
+  7988:20260513:085537.937 the system time has been pushed back, adjusting active check schedule
+  6324:20260513:201125.148 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  6324:20260513:201125.148 **** Enabled features ****
+  6324:20260513:201125.148 IPv6 support:          YES
+  6324:20260513:201125.148 TLS support:           YES
+  6324:20260513:201125.149 **************************
+  6324:20260513:201125.149 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  6324:20260513:201126.636 agent #0 started [main process]
+  7776:20260513:201126.636 agent #1 started [collector]
+  7780:20260513:201126.637 agent #2 started [listener #1]
+  7784:20260513:201126.637 agent #3 started [listener #2]
+  7792:20260513:201126.637 agent #5 started [active checks #1]
+  7788:20260513:201126.637 agent #4 started [listener #3]
+  7792:20260513:201126.644 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+  7792:20260513:201126.644 Active check configuration update started to fail

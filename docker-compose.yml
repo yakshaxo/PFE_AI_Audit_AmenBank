@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   # --- DATABASE ---
   pfe_postgres:
@@ -15,7 +17,7 @@ services:
     networks:
       - nexus_net
 
-  # --- ZABBIX SERVER ---
+  # --- ZABBIX ---
   pfe_zabbix-server:
     container_name: pfe_zabbix-server
     image: zabbix/zabbix-server-pgsql:ubuntu-6.0-latest
@@ -37,7 +39,6 @@ services:
     depends_on:
       - pfe_postgres
 
-  # --- ZABBIX WEB ---
   pfe_zabbix-web:
     container_name: pfe_zabbix-web
     image: zabbix/zabbix-web-apache-pgsql:ubuntu-6.0-latest
@@ -58,22 +59,18 @@ services:
     depends_on:
       - pfe_postgres
 
- # --- AI ENGINE ---
+  # --- AI ENGINE ---
   pfe_ai_engine:
     container_name: pfe_ai_engine
     build: .
     restart: always
-    command: uvicorn main:app --host 0.0.0.0 --port 5000 --workers 4
+    command: uvicorn main:app --host 0.0.0.0 --port 5000 --workers 4 --proxy-headers --forwarded-allow-ips='*'
     environment:
       - DB_HOST=pfe_postgres
       - DB_NAME=${AI_DB_NAME}
       - DB_USER=${POSTGRES_USER}
       - DB_PASS=${POSTGRES_PASSWORD}
-      - PYTHONUNBUFFERED=1
       - SECRET_KEY=${SECRET_KEY}
-      - SESSION_COOKIE_SECURE=${SESSION_COOKIE_SECURE}
-      - SESSION_COOKIE_HTTPONLY=${SESSION_COOKIE_HTTPONLY}
-      - SESSION_COOKIE_SAMESITE=${SESSION_COOKIE_SAMESITE}
       - ENVIRONMENT=${ENVIRONMENT}
       - DEBUG=${DEBUG}
       - INTERNAL_API_KEY=${INTERNAL_API_KEY}
@@ -92,7 +89,7 @@ services:
   pfe_grafana:
     container_name: pfe_grafana
     image: grafana/grafana-oss:latest
-    user: "0"
+    user: "0" 
     restart: always
     volumes:
       - ./grafana_data:/var/lib/grafana
@@ -101,13 +98,33 @@ services:
     depends_on:
       - pfe_postgres
     environment:
-      - GF_SECURITY_ALLOW_EMBEDDING=true
-      - GF_SERVER_CONTENT_SECURITY_POLICY=frame-ancestors 'self' http://localhost:5000
-      - GF_AUTH_ANONYMOUS_ENABLED=false
+      - GF_SECURITY_ALLOW_EMBEDDING=true           # This fixes the "Blocked" error
+      - GF_AUTH_ANONYMOUS_ENABLED=true             # Allows the dashboard to show without a second login
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+      - GF_SERVER_DOMAIN=localhost
+      - GF_SERVER_ROOT_URL=https://localhost/grafana/
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
     ports:
-      - "127.0.0.1:3000:3000"
+      - "3000:3000"
 
-# --- GLOBAL NETWORKS DEFINITION ---
+  # --- NGINX ---
+  pfe_nginx:
+    container_name: pfe_nginx
+    image: nginx:latest
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./certs:/etc/nginx/ssl:ro 
+    networks:
+      - nexus_net
+    depends_on:
+      - pfe_ai_engine
+      - pfe_grafana
+      - pfe_zabbix-web
+
 networks:
   nexus_net:
     driver: bridge

@@ -12,8 +12,11 @@ from fastapi import FastAPI, Request, Form, HTTPException, Depends, Header
 from fastapi.responses import HTMLResponse, RedirectResponse, StreamingResponse, FileResponse, JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.sessions import SessionMiddleware 
+from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware # ADDED: For Nginx support
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
+from apscheduler.schedulers.background import BackgroundScheduler
+from database import purge_old_ai_results
 
 # ── 1. PATH SETUP ───────────────────────────────────────────
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -35,6 +38,9 @@ from sla_calculator import calculate_sla
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("uvicorn")
 
+# Initialize background scheduler
+scheduler = BackgroundScheduler()
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("--- NEXUS SYSTEM STARTING ---")
@@ -43,10 +49,31 @@ async def lifespan(app: FastAPI):
         logger.info("AI Brain: Ready")
     except Exception as e:
         logger.error(f"Brain Failed: {e}")
+        
+    # --- DATA RETENTION CONFIGURATION ---
+    try:
+        # Scheduled job runs every 24 hours to delete results older than 30 days
+        scheduler.add_job(purge_old_ai_results, 'interval', hours=24, args=[30])
+        scheduler.start()
+        logger.info("Data Retention Scheduler: Active (30-day rolling window)")
+    except Exception as e:
+        logger.error(f"Failed to start Data Retention Scheduler: {e}")
+        
     yield
+    
+    logger.info("--- NEXUS SYSTEM SHUTTING DOWN ---")
+    try:
+        scheduler.shutdown()
+        logger.info("Data Retention Scheduler: Stopped cleanly")
+    except Exception as e:
+        logger.error(f"Error stopping scheduler: {e}")
 
 is_debug = os.getenv("DEBUG", "False").lower() == "true"
 app = FastAPI(title="NEXUS Intelligence System", lifespan=lifespan, debug=is_debug)
+
+# FIX: Added ProxyHeadersMiddleware to stop the redirect loop
+# This tells FastAPI to trust the 'X-Forwarded-Proto' header from Nginx
+app.add_middleware(ProxyHeadersMiddleware, trusted_hosts="*")
 
 # --- ANTI-CACHING MIDDLEWARE ---
 @app.middleware("http")
@@ -96,7 +123,7 @@ class FlagPayload(BaseModel):
     username: str
     reason: str
 
-# ── 5. SECURITY DEPENDENCIES (NEW) ──────────────────────────
+# ── 5. SECURITY DEPENDENCIES ────────────────────────────────
 API_KEY_CREDENTIAL = os.getenv("INTERNAL_API_KEY", "amen-bank-secure-key-2026")
 
 def get_current_user(request: Request):
@@ -105,26 +132,23 @@ def get_current_user(request: Request):
     return {"username": user, "role": role}
 
 def verify_logged_in(request: Request):
-    """Ensures the user has an active session for API calls."""
     u = get_current_user(request)
     if not u["username"]:
         raise HTTPException(status_code=401, detail="Authentication required")
     return u
 
 def verify_admin(request: Request):
-    """Ensures the user is an admin for API calls."""
     u = get_current_user(request)
     if not u["username"] or u["role"] != "1":
         raise HTTPException(status_code=403, detail="Admin privileges required")
     return u
 
 def verify_machine_key(x_api_key: str = Header(None)):
-    """API Key check for automated engine/webhook calls."""
     if x_api_key != API_KEY_CREDENTIAL:
         raise HTTPException(status_code=403, detail="Invalid Machine API Key")
     return x_api_key
 
-# ── 6. AUTH & UI ROUTES (UI keeps manual checks for redirects) 
+# ── 6. AUTH & UI ROUTES ─────────────────────────────────────
 @app.get("/", response_class=HTMLResponse)
 async def root():
     return RedirectResponse(url="/login", status_code=302)
@@ -272,7 +296,7 @@ async def export_csv(type: str = "all", u=Depends(verify_admin)):
     df.to_csv(buf, index=False)
     return StreamingResponse(iter([buf.getvalue()]), media_type="text/csv", headers={"Content-Disposition": "attachment; filename=NEXUS_Data.csv"})
 
-# ── 8. MACHINE API (Requires INTERNAL_API_KEY) ──────────────
+# ── 8. MACHINE API ──────────────────────────────────────────
 @app.post("/analyze", dependencies=[Depends(verify_machine_key)])
 async def api_analyze(data: AuditPayload):
     result = engine.analyze_and_store(data.host, data.value, data.item_key, data.severity)
