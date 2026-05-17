@@ -337,3 +337,197 @@
   7788:20260513:201126.637 agent #4 started [listener #3]
   7792:20260513:201126.644 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
   7792:20260513:201126.644 Active check configuration update started to fail
+  5456:20260514:192644.724 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  5456:20260514:192644.724 **** Enabled features ****
+  5456:20260514:192644.725 IPv6 support:          YES
+  5456:20260514:192644.725 TLS support:           YES
+  5456:20260514:192644.725 **************************
+  5456:20260514:192644.726 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  5456:20260514:192648.748 agent #0 started [main process]
+  7744:20260514:192648.749 agent #1 started [collector]
+  7748:20260514:192648.749 agent #2 started [listener #1]
+  7752:20260514:192648.749 agent #3 started [listener #2]
+  7756:20260514:192648.750 agent #4 started [listener #3]
+  7760:20260514:192648.750 agent #5 started [active checks #1]
+  7760:20260514:192648.759 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+  7760:20260514:192648.759 Active check configuration update started to fail
+  4884:20260514:192807.209 Zabbix Agent received shutdown request.
+  4884:20260514:192807.528 Zabbix Agent stopped. Zabbix 6.0.44 (revision f0d913a2812).
+  5260:20260514:192847.655 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  5260:20260514:192847.655 **** Enabled features ****
+  5260:20260514:192847.656 IPv6 support:          YES
+  5260:20260514:192847.656 TLS support:           YES
+  5260:20260514:192847.656 **************************
+  5260:20260514:192847.656 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  5260:20260514:192849.788 agent #0 started [main process]
+  7052:20260514:192849.789 agent #1 started [collector]
+  7056:20260514:192849.789 agent #2 started [listener #1]
+  7060:20260514:192849.790 agent #3 started [listener #2]
+  7064:20260514:192849.790 agent #4 started [listener #3]
+  7068:20260514:192849.790 agent #5 started [active checks #1]
+  7068:20260514:192849.799 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+  7068:20260514:192849.799 Active check configuration update started to fail
+  7068:20260514:194520.509 Active check configuration update from [192.168.100.117:10051] is working again
+  7064:20260514:194750.018 failed to accept an incoming connection: from 192.168.100.117: unspecified certificate verification error: TLS handshake set result code to 1: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"
+  7064:20260514:203600.126 cannot find requested PSK identity "ServerID", available PSK identity "AgentID"
+  7064:20260514:203600.129 failed to accept an incoming connection: from 192.168.100.117: TLS handshake set result code to 1: file ssl\t1_lib.c line 4644 func tls_choose_sigalg: error:0A000076:SSL routines::no suitable signature algorithm: TLS write fatal alert "handshake failure"
+  7064:20260514:203700.179 cannot find requested PSK identity "ServerID", available PSK identity "AgentID"
+  7064:20260514:203700.180 failed to accept an incoming connection: from 192.168.100.117: TLS handshake set result code to 1: file ssl\t1_lib.c line 4644 func tls_choose_sigalg: error:0A000076:SSL routines::no suitable signature algorithm: TLS write fatal alert "handshake failure"
+  7064:20260514:203800.233 cannot find requested PSK identity "ServerID", available PSK identity "AgentID"
+  7064:20260514:203800.233 failed to accept an incoming connection: from 192.168.100.117: TLS handshake set result code to 1: file ssl\t1_lib.c line 4644 func tls_choose_sigalg: error:0A000076:SSL routines::no suitable signature algorithm: TLS write fatal alert "handshake failure"
+  7068:20260514:222724.687 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: Connection refused.]
+  7068:20260514:222724.688 Active check configuration update started to fail
+  7068:20260514:222926.720 Active check configuration update from [192.168.100.117:10051] is working again
+  7068:20260514:224329.337 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: Connection refused.]
+  7068:20260514:224329.339 Active check configuration update started to fail
+  7068:20260516:183921.402 Active check configuration update from [192.168.100.117:10051] is working again
+  5008:20260516:183958.538 Zabbix Agent received stop request.
+  5008:20260516:183959.465 Zabbix Agent stopped. Zabbix 6.0.44 (revision f0d913a2812).
+ 18444:20260516:184000.038 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+ 18444:20260516:184000.038 **** Enabled features ****
+ 18444:20260516:184000.039 IPv6 support:          YES
+ 18444:20260516:184000.039 TLS support:           YES
+ 18444:20260516:184000.039 **************************
+ 18444:20260516:184000.040 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+ 18444:20260516:184001.817 agent #0 started [main process]
+  5184:20260516:184001.818 agent #1 started [collector]
+  8204:20260516:184001.818 agent #2 started [listener #1]
+  7376:20260516:184001.819 agent #3 started [listener #2]
+  7804:20260516:184001.819 agent #4 started [listener #3]
+ 12332:20260516:184001.820 agent #5 started [active checks #1]
+ 10452:20260516:185203.008 Zabbix Agent received stop request.
+ 10452:20260516:185203.523 Zabbix Agent stopped. Zabbix 6.0.44 (revision f0d913a2812).
+  4676:20260516:185210.665 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  4676:20260516:185210.666 **** Enabled features ****
+  4676:20260516:185210.666 IPv6 support:          YES
+  4676:20260516:185210.667 TLS support:           YES
+  4676:20260516:185210.667 **************************
+  4676:20260516:185210.668 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  4676:20260516:185211.613 agent #0 started [main process]
+ 11532:20260516:185211.614 agent #1 started [collector]
+  7020:20260516:185211.614 agent #2 started [listener #1]
+ 12808:20260516:185211.615 agent #3 started [listener #2]
+  5908:20260516:185211.615 agent #4 started [listener #3]
+ 13564:20260516:185211.616 agent #5 started [active checks #1]
+ 12808:20260516:185219.018 failed to accept an incoming connection: connection from "192.168.100.117" rejected, allowed hosts: "127.0.0.1"
+  7020:20260516:185234.041 failed to accept an incoming connection: connection from "192.168.100.117" rejected, allowed hosts: "127.0.0.1"
+ 13564:20260516:202016.167 Unable to connect to [127.0.0.1]:10051 [cannot connect to [[127.0.0.1]:10051]: Connection refused.]
+ 13564:20260516:202016.168 Active check configuration update started to fail
+  4388:20260517:075407.957 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  4388:20260517:075407.958 **** Enabled features ****
+  4388:20260517:075407.958 IPv6 support:          YES
+  4388:20260517:075407.958 TLS support:           YES
+  4388:20260517:075407.958 **************************
+  4388:20260517:075407.958 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  4388:20260517:075409.674 agent #0 started [main process]
+  7980:20260517:075409.675 agent #1 started [collector]
+  7984:20260517:075409.675 agent #2 started [listener #1]
+  7988:20260517:075409.675 agent #3 started [listener #2]
+  7992:20260517:075409.675 agent #4 started [listener #3]
+  7996:20260517:075409.676 agent #5 started [active checks #1]
+  7996:20260517:075411.722 Unable to connect to [127.0.0.1]:10051 [cannot connect to [[127.0.0.1]:10051]: Connection refused.]
+  7996:20260517:075411.723 Active check configuration update started to fail
+  6476:20260517:115005.302 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  6476:20260517:115005.302 **** Enabled features ****
+  6476:20260517:115005.302 IPv6 support:          YES
+  6476:20260517:115005.302 TLS support:           YES
+  6476:20260517:115005.302 **************************
+  6476:20260517:115005.303 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  6476:20260517:115006.831 agent #0 started [main process]
+  7760:20260517:115006.831 agent #1 started [collector]
+  7764:20260517:115006.831 agent #2 started [listener #1]
+  7768:20260517:115006.832 agent #3 started [listener #2]
+  7772:20260517:115006.832 agent #4 started [listener #3]
+  7776:20260517:115006.832 agent #5 started [active checks #1]
+  7776:20260517:115008.896 Unable to connect to [127.0.0.1]:10051 [cannot connect to [[127.0.0.1]:10051]: Connection refused.]
+  7776:20260517:115008.896 Active check configuration update started to fail
+  7768:20260517:122808.699 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:122808.700 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:122808.701 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7776:20260517:122820.201 Active check configuration update from [127.0.0.1:10051] is working again
+  7764:20260517:122823.620 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:122838.633 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:122853.653 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:122953.702 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:123053.754 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:123153.814 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:123253.869 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:123353.930 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:123453.983 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:123553.020 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:123653.074 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:123753.122 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:123853.182 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:123953.240 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:124053.300 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:124153.366 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:124253.417 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:124353.472 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:124453.538 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:124553.582 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:124653.623 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:124753.680 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:124853.734 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:124953.791 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:125053.846 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:125153.899 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:125253.965 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:125353.024 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:125453.080 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:125553.134 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:125653.190 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:125753.245 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:125853.304 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:125953.368 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:130053.423 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:130153.485 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:130253.541 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:130353.596 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:130453.653 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:130553.678 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:130653.742 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:130753.799 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:130853.858 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:130953.919 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:131053.970 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:131153.023 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:131253.081 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:131353.133 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:131453.192 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:131553.238 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:131653.296 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:131753.356 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:131853.412 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:131953.459 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:132053.512 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:132153.561 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:132253.603 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:132353.657 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:132453.717 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:132553.776 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:132653.834 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:132753.882 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:132853.939 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:132953.988 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:133053.032 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:133153.082 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:133253.126 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:133353.192 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  5916:20260517:133422.405 Zabbix Agent received stop request.
+  5916:20260517:133423.419 Zabbix Agent stopped. Zabbix 6.0.44 (revision f0d913a2812).
+ 15520:20260517:133424.185 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+ 15520:20260517:133424.186 **** Enabled features ****
+ 15520:20260517:133424.186 IPv6 support:          YES
+ 15520:20260517:133424.187 TLS support:           YES
+ 15520:20260517:133424.187 **************************
+ 15520:20260517:133424.187 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+ 15520:20260517:133425.775 agent #0 started [main process]
+  1344:20260517:133425.776 agent #2 started [listener #1]
+  8880:20260517:133425.777 agent #3 started [listener #2]
+  9816:20260517:133425.777 agent #1 started [collector]
+  2796:20260517:133425.778 agent #4 started [listener #3]
+  3304:20260517:133425.778 agent #5 started [active checks #1]
+  8880:20260517:133453.249 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  1344:20260517:133553.309 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  3304:20260517:133627.878 Unable to connect to [127.0.0.1]:10051 [cannot connect to [[127.0.0.1]:10051]: Connection refused.]
+  3304:20260517:133627.879 Active check configuration update started to fail

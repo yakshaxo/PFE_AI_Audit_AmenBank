@@ -12,7 +12,7 @@ from fastapi import FastAPI, Request, Form, HTTPException, Depends, Header
 from fastapi.responses import HTMLResponse, RedirectResponse, StreamingResponse, FileResponse, JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.sessions import SessionMiddleware 
-from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware # ADDED: For Nginx support
+from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware 
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from apscheduler.schedulers.background import BackgroundScheduler

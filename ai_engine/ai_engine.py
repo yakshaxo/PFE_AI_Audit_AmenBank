@@ -1,5 +1,4 @@
 import logging
-# REMOVED THE DOTS: In Docker, these are now top-level modules
 from adapter import detect_anomaly, get_recommendation, load_model
 from database import save_audit_result 
 

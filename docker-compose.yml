@@ -1,4 +1,4 @@
-version: '3.8'
+﻿version: '3.8'
 
 services:
   # --- DATABASE ---
@@ -29,6 +29,10 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - ZBX_TLSPSKIDENTITY=${ZBX_TLSPSKIDENTITY}
       - ZBX_TLSPSKFILE=${ZBX_TLSPSKFILE}
+
+      - ZBX_HOSTNAME=Zabbix server
+      - ZBX_SERVER_HOST=pfe_zabbix-server
+      - ZBX_PASSIVE_ALLOW=true
     ports:
       - "10051:10051"
     volumes:
@@ -104,6 +108,7 @@ services:
       - GF_SERVER_DOMAIN=localhost
       - GF_SERVER_ROOT_URL=https://localhost/grafana/
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
+      - GF_INSTALL_PLUGINS=alexanderzobnin-zabbix-app
     ports:
       - "3000:3000"
 
@@ -116,7 +121,8 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      # FIX: Mount explicitly to the main configuration file, not conf.d
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - ./certs:/etc/nginx/ssl:ro 
     networks:
       - nexus_net
@@ -124,7 +130,21 @@ services:
       - pfe_ai_engine
       - pfe_grafana
       - pfe_zabbix-web
+  pfe_zabbix-agent:
+    container_name: pfe_zabbix-agent
+    image: zabbix/zabbix-agent:ubuntu-6.0-latest
+    restart: always
+    environment:
+      - ZBX_HOSTNAME=Zabbix server
+      - ZBX_SERVER_HOST=pfe_zabbix-server
+    networks:
+      - nexus_net
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
 
 networks:
   nexus_net:
     driver: bridge
+  
