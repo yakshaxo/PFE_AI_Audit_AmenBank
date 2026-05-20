@@ -1,0 +1,13 @@
+🛡️ Updated Security Summary (Simple English)
+To keep this banking system safe, we use four layers of protection:
+
+Separation of Powers (New): We created a "Boss" account (postgres) to own the database. The "Worker" account (zabbix) can only add or read data. This means even if a hacker gets the worker's password, they cannot delete your tables or destroy the system.
+
+Locked-Down Cookies: We use HttpOnly and SameSite flags on all cookies. This is like putting your keys in a safe where high-tech "scripts" cannot reach them, and it stops other websites from pretending to be you.
+
+
+Secret Session Keys: Every login is signed with a unique "Secret Key". This makes it impossible for someone to fake a session or pretend they are an admin when they aren't.
+
+Anti-Clickjacking: We use a Content-Security-Policy (CSP). This tells the browser: "Only show this dashboard on my real website." This stops hackers from hiding your bank data inside their own malicious sites.
+
+Limited Access: The database user only has "Select" and "Insert" powers. It can do its job (saving AI results), but it has no power to "Drop" or delete the structure of the project.

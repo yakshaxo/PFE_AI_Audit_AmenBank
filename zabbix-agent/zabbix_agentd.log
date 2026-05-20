@@ -1,0 +1,533 @@
+ 12912:20260421:172508.107 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+ 12912:20260421:172508.108 **** Enabled features ****
+ 12912:20260421:172508.108 IPv6 support:          YES
+ 12912:20260421:172508.109 TLS support:           YES
+ 12912:20260421:172508.109 **************************
+ 12912:20260421:172508.110 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+ 12912:20260421:172510.513 agent #0 started [main process]
+ 17528:20260421:172510.514 agent #1 started [collector]
+  3788:20260421:172510.515 agent #2 started [listener #1]
+  3276:20260421:172510.515 agent #3 started [listener #2]
+  5256:20260421:172510.516 agent #4 started [listener #3]
+  5640:20260421:172510.517 agent #5 started [active checks #1]
+  5256:20260421:172510.528 cannot open file ""C:\Users\lenovo\NEXUS\zabbix\ssl\agent.psk"": [22] Invalid argument
+  3788:20260421:172510.529 cannot open file ""C:\Users\lenovo\NEXUS\zabbix\ssl\agent.psk"": [22] Invalid argument
+  5640:20260421:172510.529  10728:20260421:172539.223 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+ 10728:20260421:172539.223 **** Enabled features ****
+ 10728:20260421:172539.224 IPv6 support:          YES
+ 10728:20260421:172539.224 TLS support:           YES
+ 10728:20260421:172539.225 **************************
+ 10728:20260421:172539.225 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+ 10728:20260421:172540.037 agent #0 started [main process]
+ 18156:20260421:172540.038 agent #1 started [collector]
+ 11376:20260421:172540.038 agent #2 started [listener #1]
+  6276:20260421:172540.039 agent #3 started [listener #2]
+ 17912:20260421:172540.039 agent #4 started [listener #3]
+ 17072:20260421:172540.040 agent #5 started [active checks #1]
+ 11376:20260421:172540.043 cannot open file ""C:\Users\lenovo\NEXUS\zabbix\ssl\agent.psk"": [22] Invalid argument
+ 17072:20260421:172540.043 cannot open file ""C:\Users\lenovo\NEXUS\zabbix\ssl\agent.psk"": [22] Invalid argument
+  6420:20260421:172553.408 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  6420:20260421:172553.409 **** Enabled features ****
+  6420:20260421:172553.416 IPv6 support:          YES
+  6420:20260421:172553.423 TLS support:           YES
+  6420:20260421:172553.424 **************************
+  6420:20260421:172553.426 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  6420:20260421:172554.139 agent #0 started [main process]
+  4212:20260421:172554.140 agent #1 started [collector]
+ 17900:20260421:172554.141 agent #2 started [listener #1]
+  9016:20260421:172554.141 agent #3 started [listener #2]
+  4552:20260421:172554.142 agent #4 started [listener #3]
+  8204:20260421:172554.142 agent #5 started [active checks #1]
+  4552:20260421:172554.145 cannot open file ""C:\Users\lenovo\NEXUS\zabbix\ssl\agent.psk"": [22] Invalid argument
+ 17900:20260421:172554.146 cannot open file ""C:\Users\lenovo\NEXUS\zabbix\ssl\agent.psk"": [22] Invalid argument
+  9016:20260421:172554.146 cannot open file ""C:\Users\lenovo\NEXUS\zabbix\ssl\agent.psk"": [22] Invalid argument
+ 11012:20260421:172605.136 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+ 11012:20260421:172605.137 **** Enabled features ****
+ 11012:20260421:172605.137 IPv6 support:          YES
+ 11012:20260421:172605.138 TLS support:           YES
+ 11012:20260421:172605.138 **************************
+ 11012:20260421:172605.139 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+ 11012:20260421:172605.780 agent #0 started [main process]
+  7664:20260421:172605.781 agent #1 started [collector]
+  7660:20260421:172605.782 agent #2 started [listener #1]
+  6164:20260421:172605.782 agent #3 started [listener #2]
+  7684:20260421:172605.783 agent #4 started [listener #3]
+  7620:20260421:172605.783 agent #5 started [active checks #1]
+  6164:20260421:172605.787 cannot open file ""C:\Users\lenovo\NEXUS\zabbix\ssl\agent.psk"": [22] Invalid argument
+  7620:20260421:172605.787 cannot open file ""C:\Users\lenovo\NEXUS\zabbix\ssl\agent.psk"": [22] Invalid argument
+  7660:20260421:172605.788 cannot open file ""C:\Users\lenovo\NEXUS\zabbix\ssl\agent.psk"": [22] Invalid argument
+  3936:20260421:172806.718 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  3936:20260421:172806.719 **** Enabled features ****
+  3936:20260421:172806.719 IPv6 support:          YES
+  3936:20260421:172806.720 TLS support:           YES
+  3936:20260421:172806.720 **************************
+  3936:20260421:172806.722 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  3936:20260421:172807.671 agent #0 started [main process]
+ 16004:20260421:172807.672 agent #1 started [collector]
+ 16300:20260421:172807.672 agent #2 started [listener #1]
+ 18260:20260421:172807.673 agent #3 started [listener #2]
+ 14308:20260421:172807.673 agent #4 started [listener #3]
+  6868:20260421:172807.673 agent #5 started [active checks #1]
+  6868:20260421:172809.737 Unable to connect to [192.168.1.86]:10051 [cannot connect to [[192.168.1.86]:10051]: Connection refused.]
+  6868:20260421:172809.738 Active check configuration update started to fail
+  6868:20260421:172909.389 Active check configuration update from [192.168.1.86:10051] is working again
+ 11572:20260421:173055.278 Zabbix Agent received stop request.
+ 11572:20260421:173056.291 Zabbix Agent stopped. Zabbix 6.0.44 (revision f0d913a2812).
+  8716:20260421:174155.925 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  8716:20260421:174155.926 **** Enabled features ****
+  8716:20260421:174155.926 IPv6 support:          YES
+  8716:20260421:174155.927 TLS support:           YES
+  8716:20260421:174155.927 **************************
+  8716:20260421:174155.928 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  8716:20260421:174156.960 agent #0 started [main process]
+ 10948:20260421:174156.961 agent #1 started [collector]
+  6752:20260421:174156.962 agent #2 started [listener #1]
+  9820:20260421:174156.962 agent #3 started [listener #2]
+  9836:20260421:174156.963 agent #4 started [listener #3]
+ 12576:20260421:174156.963 agent #5 started [active checks #1]
+  3372:20260421:174319.817 Zabbix Agent received stop request.
+  3372:20260421:174320.827 Zabbix Agent stopped. Zabbix 6.0.44 (revision f0d913a2812).
+ 12344:20260421:174359.889 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+ 12344:20260421:174359.890 **** Enabled features ****
+ 12344:20260421:174359.890 IPv6 support:          YES
+ 12344:20260421:174359.891 TLS support:           YES
+ 12344:20260421:174359.891 **************************
+ 12344:20260421:174359.892 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+ 12344:20260421:174400.933 agent #0 started [main process]
+  9352:20260421:174400.934 agent #1 started [collector]
+  2176:20260421:174400.934 agent #2 started [listener #1]
+  9976:20260421:174400.935 agent #3 started [listener #2]
+ 13096:20260421:174400.935 agent #4 started [listener #3]
+ 14340:20260421:174400.936 agent #5 started [active checks #1]
+ 14340:20260421:231541.183 Unable to connect to [192.168.1.86]:10051 [cannot connect to [[192.168.1.86]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+ 14340:20260421:231541.193 Active check configuration update started to fail
+  9976:20260422:002455.595 failed to accept an incoming connection: connection from "192.168.0.153" rejected, allowed hosts: "192.168.1.86"
+ 13096:20260422:002555.662 failed to accept an incoming connection: connection from "192.168.0.153" rejected, allowed hosts: "192.168.1.86"
+  2176:20260422:002655.721 failed to accept an incoming connection: connection from "192.168.0.153" rejected, allowed hosts: "192.168.1.86"
+  9976:20260422:002755.782 failed to accept an incoming connection: connection from "192.168.0.153" rejected, allowed hosts: "192.168.1.86"
+ 13096:20260422:002855.839 failed to accept an incoming connection: connection from "192.168.0.153" rejected, allowed hosts: "192.168.1.86"
+  2176:20260422:002955.892 failed to accept an incoming connection: connection from "192.168.0.153" rejected, allowed hosts: "192.168.1.86"
+  9976:20260422:003301.067 failed to accept an incoming connection: connection from "192.168.100.118" rejected, allowed hosts: "192.168.1.86"
+  2176:20260422:003401.128 failed to accept an incoming connection: connection from "192.168.100.118" rejected, allowed hosts: "192.168.1.86"
+ 13096:20260422:003501.195 failed to accept an incoming connection: connection from "192.168.100.118" rejected, allowed hosts: "192.168.1.86"
+ 13096:20260422:003601.272 failed to accept an incoming connection: connection from "192.168.100.118" rejected, allowed hosts: "192.168.1.86"
+  2176:20260422:003701.335 failed to accept an incoming connection: connection from "192.168.100.118" rejected, allowed hosts: "192.168.1.86"
+  9976:20260422:003801.393 failed to accept an incoming connection: connection from "192.168.100.118" rejected, allowed hosts: "192.168.1.86"
+ 13096:20260422:003901.455 failed to accept an incoming connection: connection from "192.168.100.118" rejected, allowed hosts: "192.168.1.86"
+ 16524:20260422:003905.057 Zabbix Agent received stop request.
+ 16524:20260422:003906.066 Zabbix Agent stopped. Zabbix 6.0.44 (revision f0d913a2812).
+  9220:20260422:003906.424 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  9220:20260422:003906.424 **** Enabled features ****
+  9220:20260422:003906.424 IPv6 support:          YES
+  9220:20260422:003906.425 TLS support:           YES
+  9220:20260422:003906.425 **************************
+  9220:20260422:003906.426 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  9220:20260422:003908.163 agent #0 started [main process]
+  5656:20260422:003908.163 agent #2 started [listener #1]
+ 17912:20260422:003908.164 agent #3 started [listener #2]
+ 18268:20260422:003908.164 agent #1 started [collector]
+ 16192:20260422:003908.165 agent #4 started [listener #3]
+  3376:20260422:003908.165 agent #5 started [active checks #1]
+  3376:20260422:112224.064 Unable to connect to [192.168.100.118]:10051 [cannot connect to [[192.168.100.118]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+  3376:20260422:112224.123 Active check configuration update started to fail
+  7484:20260423:224536.402 Zabbix Agent received stop request.
+  7484:20260423:224537.424 Zabbix Agent stopped. Zabbix 6.0.44 (revision f0d913a2812).
+  6044:20260423:224537.782 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  6044:20260423:224537.782 **** Enabled features ****
+  6044:20260423:224537.783 IPv6 support:          YES
+  6044:20260423:224537.784 TLS support:           YES
+  6044:20260423:224537.785 **************************
+  6044:20260423:224537.785 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  6044:20260423:224540.390 agent #0 started [main process]
+ 12724:20260423:224540.400 agent #1 started [collector]
+  6636:20260423:224540.401 agent #2 started [listener #1]
+ 14140:20260423:224540.402 agent #3 started [listener #2]
+  1228:20260423:224540.402 agent #4 started [listener #3]
+  9128:20260423:224540.403 agent #5 started [active checks #1]
+  9128:20260423:224543.442 Unable to connect to [192.168.100.118]:10051 [cannot connect to [[192.168.100.118]:10051]: (null)]
+  9128:20260423:224543.443 Active check configuration update started to fail
+ 17492:20260424:111225.892 Zabbix Agent received shutdown request.
+ 17492:20260424:111226.758 Zabbix Agent stopped. Zabbix 6.0.44 (revision f0d913a2812).
+  6000:20260424:111253.749 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  6000:20260424:111253.749 **** Enabled features ****
+  6000:20260424:111253.749 IPv6 support:          YES
+  6000:20260424:111253.749 TLS support:           YES
+  6000:20260424:111253.750 **************************
+  6000:20260424:111253.750 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  6000:20260424:111255.155 agent #0 started [main process]
+  7248:20260424:111255.156 agent #1 started [collector]
+  7252:20260424:111255.156 agent #2 started [listener #1]
+  7256:20260424:111255.156 agent #3 started [listener #2]
+  7260:20260424:111255.156 agent #4 started [listener #3]
+  7264:20260424:111255.156 agent #5 started [active checks #1]
+  7264:20260424:111255.169 Unable to connect to [192.168.100.118]:10051 [cannot connect to [[192.168.100.118]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+  7264:20260424:111255.169 Active check configuration update started to fail
+  5440:20260424:132209.654 Zabbix Agent received stop request.
+  5440:20260424:132210.591 Zabbix Agent stopped. Zabbix 6.0.44 (revision f0d913a2812).
+ 11856:20260424:132211.071 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+ 11856:20260424:132211.071 **** Enabled features ****
+ 11856:20260424:132211.072 IPv6 support:          YES
+ 11856:20260424:132211.072 TLS support:           YES
+ 11856:20260424:132211.072 **************************
+ 11856:20260424:132211.072 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+ 11856:20260424:132212.240 agent #0 started [main process]
+ 15656:20260424:132212.241 agent #1 started [collector]
+  8096:20260424:132212.241 agent #2 started [listener #1]
+ 13112:20260424:132212.242 agent #3 started [listener #2]
+  2520:20260424:132212.242 agent #4 started [listener #3]
+ 13968:20260424:132212.243 agent #5 started [active checks #1]
+ 13968:20260424:134616.404 Unable to receive from [192.168.100.117]:10051 [SSL_read() I/O error: [0x0000274C] Une tentative de connexion a échoué car le parti connecté n’a pas répondu convenablement au-delà d’une certaine durée ou une connexion établie a échoué car l’hôte de connexion n’a pas répondu.]
+ 13968:20260424:134616.408 Active check configuration update started to fail
+ 13968:20260424:134717.028 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260424:141918.824 Unable to connect to [192.168.100.117]:10051 [TCP successful, cannot establish TLS to [[192.168.100.117]:10051]: SSL_connect() set result code to SSL_ERROR_SSL: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"]
+ 13968:20260424:141918.826 Active check configuration update started to fail
+ 13968:20260424:142018.181 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260424:173100.366 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+ 13968:20260424:173100.537 Active check configuration update started to fail
+ 13112:20260424:173104.821 failed to accept an incoming connection: from 192.168.100.117: unspecified certificate verification error: TLS handshake set result code to 1: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"
+ 13968:20260424:173200.302 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260424:213147.821 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+ 13968:20260424:213147.824 Active check configuration update started to fail
+  8096:20260425:204701.776 SSL_shutdown() with 192.168.100.117 set result code to 5:
+ 13968:20260425:204755.655 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260425:204958.688 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: (null)]
+ 13968:20260425:204958.690 Active check configuration update started to fail
+ 13968:20260426:132738.904 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260426:132941.026 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: Connection refused.]
+ 13968:20260426:132941.027 Active check configuration update started to fail
+ 13968:20260426:133144.221 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260426:135545.041 Unable to connect to [192.168.100.117]:10051 [TCP successful, cannot establish TLS to [[192.168.100.117]:10051]: SSL_connect() set result code to SSL_ERROR_SSL: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"]
+ 13968:20260426:135545.042 Active check configuration update started to fail
+ 13968:20260426:135645.562 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260426:140059.268 the system time has been pushed back, adjusting active check schedule
+ 13968:20260426:010102.472 the system time has been pushed back, adjusting active check schedule
+ 13968:20260426:010501.875 the system time has been pushed back, adjusting active check schedule
+ 13968:20260426:141732.568 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: Connection refused.]
+ 13968:20260426:141732.580 Active check configuration update started to fail
+ 13968:20260427:201334.740 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260427:214740.055 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: (null)]
+ 13968:20260427:214740.056 Active check configuration update started to fail
+ 13968:20260427:214840.567 Active check configuration update from [192.168.100.117:10051] is working again
+ 13112:20260427:220302.382 failed to accept an incoming connection: from 192.168.100.117: unspecified certificate verification error: TLS handshake set result code to 1: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"
+  8096:20260427:220302.383 failed to accept an incoming connection: from 192.168.100.117: unspecified certificate verification error: TLS handshake set result code to 1: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"
+  8096:20260427:224427.898 failed to accept an incoming connection: from 192.168.100.117: unspecified certificate verification error: TLS handshake set result code to 1: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"
+ 13112:20260427:224427.899 failed to accept an incoming connection: from 192.168.100.117: unspecified certificate verification error: TLS handshake set result code to 1: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"
+  8096:20260427:225014.444 failed to accept an incoming connection: from 192.168.100.117: unspecified certificate verification error: TLS handshake set result code to 1: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"
+ 13112:20260427:225014.445 failed to accept an incoming connection: from 192.168.100.117: unspecified certificate verification error: TLS handshake set result code to 1: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"
+  2520:20260427:230337.138 failed to accept an incoming connection: from 192.168.100.117: unspecified certificate verification error: TLS handshake set result code to 1: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"
+  8096:20260427:230337.141 failed to accept an incoming connection: from 192.168.100.117: unspecified certificate verification error: TLS handshake set result code to 1: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"
+ 13968:20260427:231646.001 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: Connection refused.]
+ 13968:20260427:231646.003 Active check configuration update started to fail
+ 13968:20260428:203747.873 the system time has been pushed back, adjusting active check schedule
+ 13968:20260428:211459.499 Active check configuration update from [192.168.100.117:10051] is working again
+  8096:20260428:221120.258 SSL_shutdown() with 192.168.100.117 set result code to 5:
+  2520:20260428:221120.261 SSL_shutdown() with 192.168.100.117 set result code to 5:
+ 13968:20260429:202916.076 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+ 13968:20260429:202916.091 Active check configuration update started to fail
+ 13968:20260429:203727.650 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260429:204129.812 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: Connection refused.]
+ 13968:20260429:204129.813 Active check configuration update started to fail
+ 13968:20260429:204229.360 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260429:204634.526 Unable to receive from [192.168.100.117]:10051 [SSL_read() I/O error: [0x0000274C] Une tentative de connexion a échoué car le parti connecté n’a pas répondu convenablement au-delà d’une certaine durée ou une connexion établie a échoué car l’hôte de connexion n’a pas répondu.]
+ 13968:20260429:204634.527 Active check configuration update started to fail
+ 13968:20260429:204734.376 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260429:213942.007 Unable to receive from [192.168.100.117]:10051 [SSL_read() I/O error: [0x0000274C] Une tentative de connexion a échoué car le parti connecté n’a pas répondu convenablement au-delà d’une certaine durée ou une connexion établie a échoué car l’hôte de connexion n’a pas répondu.]
+ 13968:20260429:213942.008 Active check configuration update started to fail
+ 13968:20260429:214042.650 Active check configuration update from [192.168.100.117:10051] is working again
+  8096:20260429:231909.048 SSL_shutdown() with 192.168.100.117 set result code to 5:
+ 13112:20260429:231909.145 SSL_shutdown() with 192.168.100.117 set result code to 5:
+ 13968:20260430:164843.994 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+ 13968:20260430:164843.995 Active check configuration update started to fail
+ 13968:20260430:164941.324 the system time has been pushed back, adjusting active check schedule
+ 13968:20260430:213601.155 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260430:215402.119 Unable to connect to [192.168.100.117]:10051 [TCP successful, cannot establish TLS to [[192.168.100.117]:10051]: SSL_connect() set result code to SSL_ERROR_SSL: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"]
+ 13968:20260430:215402.120 Active check configuration update started to fail
+ 13968:20260430:215502.580 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260501:152729.042 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+ 13968:20260501:152729.066 Active check configuration update started to fail
+ 13968:20260504:192926.990 the system time has been pushed back, adjusting active check schedule
+ 13968:20260509:114720.049 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260509:160626.041 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+ 13968:20260509:160626.042 Active check configuration update started to fail
+ 13968:20260509:160726.973 Active check configuration update from [192.168.100.117:10051] is working again
+ 13112:20260509:173923.089 SSL_shutdown() with 192.168.100.117 set result code to 5:
+  2520:20260509:173923.095 SSL_shutdown() with 192.168.100.117 set result code to 5:
+ 13968:20260509:173929.812 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: Connection refused.]
+ 13968:20260509:173929.812 Active check configuration update started to fail
+ 13968:20260510:204002.138 Active check configuration update from [192.168.100.117:10051] is working again
+ 13968:20260510:215608.667 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: (null)]
+ 13968:20260510:215608.668 Active check configuration update started to fail
+ 15808:20260511:205143.531 Zabbix Agent received shutdown request.
+ 15808:20260511:205144.552 Zabbix Agent stopped. Zabbix 6.0.44 (revision f0d913a2812).
+  6116:20260511:205211.186 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  6116:20260511:205211.187 **** Enabled features ****
+  6116:20260511:205211.187 IPv6 support:          YES
+  6116:20260511:205211.187 TLS support:           YES
+  6116:20260511:205211.187 **************************
+  6116:20260511:205211.187 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  6116:20260511:205212.772 agent #0 started [main process]
+  7916:20260511:205212.772 agent #1 started [collector]
+  7920:20260511:205212.773 agent #2 started [listener #1]
+  7924:20260511:205212.773 agent #3 started [listener #2]
+  7928:20260511:205212.773 agent #4 started [listener #3]
+  7932:20260511:205212.773 agent #5 started [active checks #1]
+  7932:20260511:205212.786 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+  7932:20260511:205212.786 Active check configuration update started to fail
+  7932:20260511:205414.950 Active check configuration update from [192.168.100.117:10051] is working again
+  5824:20260511:210201.530 Zabbix Agent received shutdown request.
+  5824:20260511:210202.511 Zabbix Agent stopped. Zabbix 6.0.44 (revision f0d913a2812).
+  6504:20260511:210226.225 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  6504:20260511:210226.226 **** Enabled features ****
+  6504:20260511:210226.227 IPv6 support:          YES
+  6504:20260511:210226.227 TLS support:           YES
+  6504:20260511:210226.227 **************************
+  6504:20260511:210226.227 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  6504:20260511:210227.604 agent #0 started [main process]
+  7920:20260511:210227.605 agent #1 started [collector]
+  7924:20260511:210227.605 agent #2 started [listener #1]
+  7928:20260511:210227.605 agent #3 started [listener #2]
+  7932:20260511:210227.605 agent #4 started [listener #3]
+  7936:20260511:210227.605 agent #5 started [active checks #1]
+  7936:20260511:210227.618 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+  7936:20260511:210227.618 Active check configuration update started to fail
+  7936:20260511:210837.956 Active check configuration update from [192.168.100.117:10051] is working again
+  6040:20260511:211512.526 Zabbix Agent received shutdown request.
+  6040:20260511:211513.432 Zabbix Agent stopped. Zabbix 6.0.44 (revision f0d913a2812).
+  6224:20260511:211537.897 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  6224:20260511:211537.897 **** Enabled features ****
+  6224:20260511:211537.898 IPv6 support:          YES
+  6224:20260511:211537.898 TLS support:           YES
+  6224:20260511:211537.898 **************************
+  6224:20260511:211537.898 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  6224:20260511:211539.388 agent #0 started [main process]
+  7972:20260511:211539.389 agent #1 started [collector]
+  7976:20260511:211539.389 agent #2 started [listener #1]
+  7980:20260511:211539.389 agent #3 started [listener #2]
+  7984:20260511:211539.389 agent #4 started [listener #3]
+  7988:20260511:211539.389 agent #5 started [active checks #1]
+  7988:20260511:211539.397 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+  7988:20260511:211539.397 Active check configuration update started to fail
+  7988:20260511:211739.516 Active check configuration update from [192.168.100.117:10051] is working again
+  7988:20260511:213341.862 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: Connection refused.]
+  7988:20260511:213341.863 Active check configuration update started to fail
+  7988:20260511:213441.383 Active check configuration update from [192.168.100.117:10051] is working again
+  7988:20260511:222444.792 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: Connection refused.]
+  7988:20260511:222444.794 Active check configuration update started to fail
+  7988:20260512:071532.724 Active check configuration update from [192.168.100.117:10051] is working again
+  7988:20260512:071734.730 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: Connection refused.]
+  7988:20260512:071734.731 Active check configuration update started to fail
+  7988:20260512:195156.219 Active check configuration update from [192.168.100.117:10051] is working again
+  7988:20260512:213110.077 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+  7988:20260512:213110.087 Active check configuration update started to fail
+  7988:20260512:213417.864 Active check configuration update from [192.168.100.117:10051] is working again
+  7988:20260512:224222.984 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: Connection refused.]
+  7988:20260512:224222.985 Active check configuration update started to fail
+  7988:20260513:085537.937 the system time has been pushed back, adjusting active check schedule
+  6324:20260513:201125.148 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  6324:20260513:201125.148 **** Enabled features ****
+  6324:20260513:201125.148 IPv6 support:          YES
+  6324:20260513:201125.148 TLS support:           YES
+  6324:20260513:201125.149 **************************
+  6324:20260513:201125.149 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  6324:20260513:201126.636 agent #0 started [main process]
+  7776:20260513:201126.636 agent #1 started [collector]
+  7780:20260513:201126.637 agent #2 started [listener #1]
+  7784:20260513:201126.637 agent #3 started [listener #2]
+  7792:20260513:201126.637 agent #5 started [active checks #1]
+  7788:20260513:201126.637 agent #4 started [listener #3]
+  7792:20260513:201126.644 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+  7792:20260513:201126.644 Active check configuration update started to fail
+  5456:20260514:192644.724 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  5456:20260514:192644.724 **** Enabled features ****
+  5456:20260514:192644.725 IPv6 support:          YES
+  5456:20260514:192644.725 TLS support:           YES
+  5456:20260514:192644.725 **************************
+  5456:20260514:192644.726 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  5456:20260514:192648.748 agent #0 started [main process]
+  7744:20260514:192648.749 agent #1 started [collector]
+  7748:20260514:192648.749 agent #2 started [listener #1]
+  7752:20260514:192648.749 agent #3 started [listener #2]
+  7756:20260514:192648.750 agent #4 started [listener #3]
+  7760:20260514:192648.750 agent #5 started [active checks #1]
+  7760:20260514:192648.759 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+  7760:20260514:192648.759 Active check configuration update started to fail
+  4884:20260514:192807.209 Zabbix Agent received shutdown request.
+  4884:20260514:192807.528 Zabbix Agent stopped. Zabbix 6.0.44 (revision f0d913a2812).
+  5260:20260514:192847.655 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  5260:20260514:192847.655 **** Enabled features ****
+  5260:20260514:192847.656 IPv6 support:          YES
+  5260:20260514:192847.656 TLS support:           YES
+  5260:20260514:192847.656 **************************
+  5260:20260514:192847.656 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  5260:20260514:192849.788 agent #0 started [main process]
+  7052:20260514:192849.789 agent #1 started [collector]
+  7056:20260514:192849.789 agent #2 started [listener #1]
+  7060:20260514:192849.790 agent #3 started [listener #2]
+  7064:20260514:192849.790 agent #4 started [listener #3]
+  7068:20260514:192849.790 agent #5 started [active checks #1]
+  7068:20260514:192849.799 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: [0x00002743] Une opération a été tentée sur un réseau impossible à atteindre.]
+  7068:20260514:192849.799 Active check configuration update started to fail
+  7068:20260514:194520.509 Active check configuration update from [192.168.100.117:10051] is working again
+  7064:20260514:194750.018 failed to accept an incoming connection: from 192.168.100.117: unspecified certificate verification error: TLS handshake set result code to 1: file ssl\record\rec_layer_s3.c line 701 func : error:0A000126:SSL routines::unexpected eof while reading: TLS write fatal alert "decode error"
+  7064:20260514:203600.126 cannot find requested PSK identity "ServerID", available PSK identity "AgentID"
+  7064:20260514:203600.129 failed to accept an incoming connection: from 192.168.100.117: TLS handshake set result code to 1: file ssl\t1_lib.c line 4644 func tls_choose_sigalg: error:0A000076:SSL routines::no suitable signature algorithm: TLS write fatal alert "handshake failure"
+  7064:20260514:203700.179 cannot find requested PSK identity "ServerID", available PSK identity "AgentID"
+  7064:20260514:203700.180 failed to accept an incoming connection: from 192.168.100.117: TLS handshake set result code to 1: file ssl\t1_lib.c line 4644 func tls_choose_sigalg: error:0A000076:SSL routines::no suitable signature algorithm: TLS write fatal alert "handshake failure"
+  7064:20260514:203800.233 cannot find requested PSK identity "ServerID", available PSK identity "AgentID"
+  7064:20260514:203800.233 failed to accept an incoming connection: from 192.168.100.117: TLS handshake set result code to 1: file ssl\t1_lib.c line 4644 func tls_choose_sigalg: error:0A000076:SSL routines::no suitable signature algorithm: TLS write fatal alert "handshake failure"
+  7068:20260514:222724.687 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: Connection refused.]
+  7068:20260514:222724.688 Active check configuration update started to fail
+  7068:20260514:222926.720 Active check configuration update from [192.168.100.117:10051] is working again
+  7068:20260514:224329.337 Unable to connect to [192.168.100.117]:10051 [cannot connect to [[192.168.100.117]:10051]: Connection refused.]
+  7068:20260514:224329.339 Active check configuration update started to fail
+  7068:20260516:183921.402 Active check configuration update from [192.168.100.117:10051] is working again
+  5008:20260516:183958.538 Zabbix Agent received stop request.
+  5008:20260516:183959.465 Zabbix Agent stopped. Zabbix 6.0.44 (revision f0d913a2812).
+ 18444:20260516:184000.038 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+ 18444:20260516:184000.038 **** Enabled features ****
+ 18444:20260516:184000.039 IPv6 support:          YES
+ 18444:20260516:184000.039 TLS support:           YES
+ 18444:20260516:184000.039 **************************
+ 18444:20260516:184000.040 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+ 18444:20260516:184001.817 agent #0 started [main process]
+  5184:20260516:184001.818 agent #1 started [collector]
+  8204:20260516:184001.818 agent #2 started [listener #1]
+  7376:20260516:184001.819 agent #3 started [listener #2]
+  7804:20260516:184001.819 agent #4 started [listener #3]
+ 12332:20260516:184001.820 agent #5 started [active checks #1]
+ 10452:20260516:185203.008 Zabbix Agent received stop request.
+ 10452:20260516:185203.523 Zabbix Agent stopped. Zabbix 6.0.44 (revision f0d913a2812).
+  4676:20260516:185210.665 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  4676:20260516:185210.666 **** Enabled features ****
+  4676:20260516:185210.666 IPv6 support:          YES
+  4676:20260516:185210.667 TLS support:           YES
+  4676:20260516:185210.667 **************************
+  4676:20260516:185210.668 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  4676:20260516:185211.613 agent #0 started [main process]
+ 11532:20260516:185211.614 agent #1 started [collector]
+  7020:20260516:185211.614 agent #2 started [listener #1]
+ 12808:20260516:185211.615 agent #3 started [listener #2]
+  5908:20260516:185211.615 agent #4 started [listener #3]
+ 13564:20260516:185211.616 agent #5 started [active checks #1]
+ 12808:20260516:185219.018 failed to accept an incoming connection: connection from "192.168.100.117" rejected, allowed hosts: "127.0.0.1"
+  7020:20260516:185234.041 failed to accept an incoming connection: connection from "192.168.100.117" rejected, allowed hosts: "127.0.0.1"
+ 13564:20260516:202016.167 Unable to connect to [127.0.0.1]:10051 [cannot connect to [[127.0.0.1]:10051]: Connection refused.]
+ 13564:20260516:202016.168 Active check configuration update started to fail
+  4388:20260517:075407.957 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  4388:20260517:075407.958 **** Enabled features ****
+  4388:20260517:075407.958 IPv6 support:          YES
+  4388:20260517:075407.958 TLS support:           YES
+  4388:20260517:075407.958 **************************
+  4388:20260517:075407.958 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  4388:20260517:075409.674 agent #0 started [main process]
+  7980:20260517:075409.675 agent #1 started [collector]
+  7984:20260517:075409.675 agent #2 started [listener #1]
+  7988:20260517:075409.675 agent #3 started [listener #2]
+  7992:20260517:075409.675 agent #4 started [listener #3]
+  7996:20260517:075409.676 agent #5 started [active checks #1]
+  7996:20260517:075411.722 Unable to connect to [127.0.0.1]:10051 [cannot connect to [[127.0.0.1]:10051]: Connection refused.]
+  7996:20260517:075411.723 Active check configuration update started to fail
+  6476:20260517:115005.302 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+  6476:20260517:115005.302 **** Enabled features ****
+  6476:20260517:115005.302 IPv6 support:          YES
+  6476:20260517:115005.302 TLS support:           YES
+  6476:20260517:115005.302 **************************
+  6476:20260517:115005.303 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+  6476:20260517:115006.831 agent #0 started [main process]
+  7760:20260517:115006.831 agent #1 started [collector]
+  7764:20260517:115006.831 agent #2 started [listener #1]
+  7768:20260517:115006.832 agent #3 started [listener #2]
+  7772:20260517:115006.832 agent #4 started [listener #3]
+  7776:20260517:115006.832 agent #5 started [active checks #1]
+  7776:20260517:115008.896 Unable to connect to [127.0.0.1]:10051 [cannot connect to [[127.0.0.1]:10051]: Connection refused.]
+  7776:20260517:115008.896 Active check configuration update started to fail
+  7768:20260517:122808.699 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:122808.700 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:122808.701 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7776:20260517:122820.201 Active check configuration update from [127.0.0.1:10051] is working again
+  7764:20260517:122823.620 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:122838.633 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:122853.653 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:122953.702 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:123053.754 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:123153.814 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:123253.869 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:123353.930 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:123453.983 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:123553.020 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:123653.074 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:123753.122 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:123853.182 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:123953.240 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:124053.300 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:124153.366 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:124253.417 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:124353.472 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:124453.538 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:124553.582 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:124653.623 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:124753.680 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:124853.734 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:124953.791 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:125053.846 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:125153.899 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:125253.965 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:125353.024 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:125453.080 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:125553.134 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:125653.190 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:125753.245 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:125853.304 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:125953.368 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:130053.423 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:130153.485 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:130253.541 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:130353.596 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:130453.653 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:130553.678 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:130653.742 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:130753.799 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:130853.858 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:130953.919 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:131053.970 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:131153.023 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:131253.081 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:131353.133 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:131453.192 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:131553.238 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:131653.296 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:131753.356 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:131853.412 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:131953.459 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:132053.512 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:132153.561 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:132253.603 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:132353.657 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:132453.717 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:132553.776 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:132653.834 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:132753.882 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:132853.939 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7764:20260517:132953.988 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:133053.032 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:133153.082 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7768:20260517:133253.126 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  7772:20260517:133353.192 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  5916:20260517:133422.405 Zabbix Agent received stop request.
+  5916:20260517:133423.419 Zabbix Agent stopped. Zabbix 6.0.44 (revision f0d913a2812).
+ 15520:20260517:133424.185 Starting Zabbix Agent [louay-pc]. Zabbix 6.0.44 (revision f0d913a2812).
+ 15520:20260517:133424.186 **** Enabled features ****
+ 15520:20260517:133424.186 IPv6 support:          YES
+ 15520:20260517:133424.187 TLS support:           YES
+ 15520:20260517:133424.187 **************************
+ 15520:20260517:133424.187 using configuration file: C:\Users\lenovo\NEXUS\zabbix-agent\zabbix_agentd.conf
+ 15520:20260517:133425.775 agent #0 started [main process]
+  1344:20260517:133425.776 agent #2 started [listener #1]
+  8880:20260517:133425.777 agent #3 started [listener #2]
+  9816:20260517:133425.777 agent #1 started [collector]
+  2796:20260517:133425.778 agent #4 started [listener #3]
+  3304:20260517:133425.778 agent #5 started [active checks #1]
+  8880:20260517:133453.249 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  1344:20260517:133553.309 failed to accept an incoming connection: connection from "127.0.0.1" rejected, allowed hosts: "0.0.0.0"
+  3304:20260517:133627.878 Unable to connect to [127.0.0.1]:10051 [cannot connect to [[127.0.0.1]:10051]: Connection refused.]
+  3304:20260517:133627.879 Active check configuration update started to fail

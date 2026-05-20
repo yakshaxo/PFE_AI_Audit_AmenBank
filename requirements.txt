@@ -1,0 +1,31 @@
+﻿# Web & Server
+fastapi
+uvicorn
+pydantic
+python-multipart
+jinja2
+
+# Security
+bcrypt==4.0.1
+passlib[bcrypt]
+python-jose[cryptography]
+
+# AI & Data
+numpy
+pandas
+scikit-learn
+joblib
+
+# Database & Utils
+psycopg2-binary
+python-dotenv
+requests
+
+# Visuals & Reports
+matplotlib
+seaborn
+reportlab
+
+starlette
+itsdangerous
+apscheduler

@@ -1,143 +1,150 @@
-
+﻿version: '3.8'
 
 services:
-  # ============================================
-  # PostgreSQL Database (Zabbix + Auth data)
-  # ============================================
-  postgres:
-    image: postgres:15-alpine
-    container_name: pfe-postgres
+  # --- DATABASE ---
+  pfe_postgres:
+    container_name: pfe_postgres
+    image: postgres:13
+    restart: always
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./postgres/init:/docker-entrypoint-initdb.d
+      - ./postgres_data:/var/lib/postgresql/data
     networks:
-      - pfe-network
-    restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          memory: ${MEMORY_LIMIT_POSTGRES:-1g}
+      - nexus_net
 
-  # ============================================
-  # Zabbix Server
-  # ============================================
-  zabbix-server:
-    image: zabbix/zabbix-server-pgsql:alpine-6.4-latest
-    container_name: pfe-zabbix-server
+  # --- ZABBIX ---
+  pfe_zabbix-server:
+    container_name: pfe_zabbix-server
+    image: zabbix/zabbix-server-pgsql:ubuntu-6.0-latest
+    restart: always
     environment:
-      DB_SERVER_HOST: postgres
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-      ZBX_ENABLE_SNMP_TRAPS: "true"
-    depends_on:
-      - postgres
-    networks:
-      - pfe-network
+      - DB_SERVER_HOST=pfe_postgres
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - ZBX_TLSPSKIDENTITY=${ZBX_TLSPSKIDENTITY}
+      - ZBX_TLSPSKFILE=${ZBX_TLSPSKFILE}
+
+      - ZBX_HOSTNAME=Zabbix server
+      - ZBX_SERVER_HOST=pfe_zabbix-server
+      - ZBX_PASSIVE_ALLOW=true
     ports:
       - "10051:10051"
-    restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          memory: ${MEMORY_LIMIT_ZABBIX:-2g}
-
-  # ============================================
-  # Zabbix Web Interface
-  # ============================================  # ============================================
-  # Zabbix Web Interface
-  # ============================================
-  zabbix-web:
-    image: zabbix/zabbix-web-nginx-pgsql:alpine-6.4-latest
-    container_name: pfe-zabbix-web
-    environment:
-      ZBX_SERVER_HOST: zabbix-server
-      DB_SERVER_HOST: postgres
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-      PHP_TZ: Africa/Tunis
-      ZBX_SERVER_NAME: "louay-zabbix-server" 
-    ports:
-      - "${EXTERNAL_PORT_ZABBIX:-8080}:8080"
-    depends_on:
-      - postgres
-      - zabbix-server
-    networks:
-      - pfe-network
-    restart: unless-stopped
-
-
-  # ============================================
-  # Grafana (Visualization)
-  # ============================================
-  grafana:
-    image: grafana/grafana:latest
-    container_name: pfe-grafana
-    environment:
-      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER}
-      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
-      GF_INSTALL_PLUGINS: alexanderzobnin-zabbix-app
     volumes:
-      - grafana_data:/var/lib/grafana
-      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
-      - ./grafana/provisioning:/etc/grafana/provisioning
-    ports:
-      - "${EXTERNAL_PORT_GRAFANA:-3000}:3000"
+      - ./agent.psk:/var/lib/zabbix/enc/agent.psk:ro
+      - ./server.psk:/var/lib/zabbix/enc/server.psk:ro
+    networks:
+      - nexus_net
     depends_on:
-      - postgres
-    networks:
-      - pfe-network
-    restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          memory: ${MEMORY_LIMIT_GRAFANA:-512m}
+      - pfe_postgres
 
-  # ============================================
-  # Milvus (Vector Database) - Uncomment in Week 5
-  # ============================================
-  # milvus:
-  #   image: milvusdb/milvus:latest
-  #   container_name: pfe-milvus
-  #   ports:
-  #     - "19530:19530"
-  #   networks:
-  #     - pfe-network
-  #   restart: unless-stopped
-
-  # ============================================
-  # AI Chatbot - Uncomment in Week 6
-  # ============================================
-  ai-chatbot:
-    build:
-      context: ./ai-chatbot
-      dockerfile: Dockerfile
-    container_name: pfe-ai-chatbot
+  pfe_zabbix-web:
+    container_name: pfe_zabbix-web
+    image: zabbix/zabbix-web-apache-pgsql:ubuntu-6.0-latest
+    restart: always
     environment:
-      MODEL_PATH: ${AI_MODEL_PATH}
-    volumes:
-      - ./ai-chatbot/models:/app/models
+      - ZBX_SERVER_HOST=pfe_zabbix-server
+      - DB_SERVER_HOST=pfe_postgres
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - PHP_TZ=Africa/Tunis
     ports:
-      - "${EXTERNAL_PORT_AI_API:-5000}:5000"
+      - "8080:8080"
+    volumes:
+      - ./agent.psk:/var/lib/zabbix/enc/agent.psk:ro
     networks:
-      - pfe-network
-    restart: unless-stopped
+      - nexus_net
+    depends_on:
+      - pfe_postgres
 
-# ============================================
-# Networks
-# ============================================
+  # --- AI ENGINE ---
+  pfe_ai_engine:
+    container_name: pfe_ai_engine
+    build: .
+    restart: always
+    command: uvicorn main:app --host 0.0.0.0 --port 5000 --workers 4 --proxy-headers --forwarded-allow-ips='*'
+    environment:
+      - DB_HOST=pfe_postgres
+      - DB_NAME=${AI_DB_NAME}
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASS=${POSTGRES_PASSWORD}
+      - SECRET_KEY=${SECRET_KEY}
+      - ENVIRONMENT=${ENVIRONMENT}
+      - DEBUG=${DEBUG}
+      - INTERNAL_API_KEY=${INTERNAL_API_KEY}
+    ports:
+      - "${APP_PORT}:5000"
+    volumes:
+      - ./ai_engine:/app
+      - ./templates:/app/templates
+    working_dir: /app
+    networks:
+      - nexus_net
+    depends_on:
+      - pfe_postgres  
+
+  # --- GRAFANA ---
+  pfe_grafana:
+    container_name: pfe_grafana
+    image: grafana/grafana-oss:latest
+    user: "0" 
+    restart: always
+    volumes:
+      - ./grafana_data:/var/lib/grafana
+    networks:
+      - nexus_net
+    depends_on:
+      - pfe_postgres
+    environment:
+      - GF_SECURITY_ALLOW_EMBEDDING=true           # This fixes the "Blocked" error
+      - GF_AUTH_ANONYMOUS_ENABLED=true             # Allows the dashboard to show without a second login
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+      - GF_SERVER_DOMAIN=localhost
+      - GF_SERVER_ROOT_URL=https://localhost/grafana/
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+      - GF_INSTALL_PLUGINS=alexanderzobnin-zabbix-app
+    ports:
+      - "3000:3000"
+
+  # --- NGINX ---
+  pfe_nginx:
+    container_name: pfe_nginx
+    image: nginx:latest
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # FIX: Mount explicitly to the main configuration file, not conf.d
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/ssl:ro 
+    networks:
+      - nexus_net
+    depends_on:
+      - pfe_ai_engine
+      - pfe_grafana
+      - pfe_zabbix-web
+  pfe_zabbix-agent:
+    container_name: pfe_zabbix-agent
+    image: zabbix/zabbix-agent:ubuntu-6.0-latest
+    restart: always
+    environment:
+      - ZBX_HOSTNAME=Zabbix server
+      - ZBX_SERVER_HOST=pfe_zabbix-server
+    networks:
+      - nexus_net
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+
 networks:
-  pfe-network:
+  nexus_net:
     driver: bridge
-
-# ============================================
-# Volumes (Persistent Data)
-# ============================================
-volumes:
-  postgres_data:
-  grafana_data:
+  

@@ -1,0 +1,40 @@
+﻿# --- NEXUS Secrets ---
+.env
+auth_tokens.json
+*.session
+
+# --- Infrastructure & Storage (The "Disk Eaters") ---
+zabbix/postgres_data/
+nexus_db_data/
+*.vhdx
+*.vdi
+
+# --- Logs & Performance ---
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- Python Junk ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# --- Build & Distribution ---
+dist/
+build/
+*.egg-info/
+.docker-build-cache/
+
+# --- Reports & Exports ---
+reports/*.pdf
+reports/*.csv
+exports/
